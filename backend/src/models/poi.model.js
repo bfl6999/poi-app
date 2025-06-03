@@ -1,0 +1,26 @@
+const mongoose = require('mongoose');
+
+const commentSchema = new mongoose.Schema({
+  author: { type: String, required: true },
+  comment: { type: String, required: true, maxlength: 1000 },
+  stars: { type: Number, required: true, min: 0, max: 5 },
+  location: {
+    lat: Number,
+    lng: Number,
+  },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const poiSchema = new mongoose.Schema({
+  name: String,
+  location: String,
+  dateAdded: { type: Date, default: Date.now },
+  imageUrl: String,
+  coordinates: {
+    lat: Number,
+    lng: Number,
+  },
+  comments: [commentSchema]
+});
+
+module.exports = mongoose.model('POI', poiSchema);
