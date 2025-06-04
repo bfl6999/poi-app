@@ -8,6 +8,24 @@ const commentSchema = new mongoose.Schema({
     lat: Number,
     lng: Number,
   },
+  geo: {
+  type: {
+    type: String,
+    enum: ['Point'],
+    default: 'Point'
+  },
+
+  imageUrl: String,
+  source: {
+    type: String,
+    enum: ['form', 'foursquare'],
+    default: 'form'
+},
+  coordinates: {
+    type: [Number], // [lng, lat]
+    required: true
+  }
+},
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -16,10 +34,26 @@ const poiSchema = new mongoose.Schema({
   location: String,
   dateAdded: { type: Date, default: Date.now },
   imageUrl: String,
+  source: {
+  type: String,
+  enum: ['form', 'foursquare'],
+  default: 'form'
+},
   coordinates: {
     lat: Number,
     lng: Number,
   },
+  geo: {
+  type: {
+    type: String,
+    enum: ['Point'],
+    default: 'Point'
+  },
+  coordinates: {
+    type: [Number], // [lng, lat]
+    required: true
+  }
+},
   comments: [commentSchema]
 });
 
