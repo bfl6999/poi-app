@@ -12,7 +12,8 @@ firebaseConfig: {
   storageBucket: "project-poi-a5f54.firebasestorage.app",
   messagingSenderId: "94497583848",
   appId: "1:94497583848:web:fc3c34d19a9ab698158f5d"
-}
+  },
+  apiUrl: 'http://localhost:3000/api' 
 };
 /*
  * For easier debugging in development mode, you can import the following file
