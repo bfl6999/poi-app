@@ -13,7 +13,8 @@ firebaseConfig: {
   messagingSenderId: "94497583848",
   appId: "1:94497583848:web:fc3c34d19a9ab698158f5d"
   },
-  apiUrl: 'http://localhost:3000/api' 
+  apiUrl: 'http://localhost:3000/api',
+  foursqueareApiKey: 'fsq3o9QymD4oq8wkZ2Jy2jwQ98ae29SgK4Ibbe5cY+4EoZo=',
 };
 /*
  * For easier debugging in development mode, you can import the following file

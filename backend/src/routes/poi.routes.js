@@ -2,6 +2,21 @@ const express = require('express');
 const router = express.Router();
 const POI = require('../models/poi.model');
 const auth = require('../middlewares/firebaseAuth'); // middleware para usuarios que se registran
+const { loadFromFoursquare } = require('../controllers/foursquare.controller');
+
+
+/**
+ * @swagger
+ * /pois:
+ *   get:
+ *     summary: Obtener todos los POIs
+ *     responses:
+ *       200:
+ *         description: Lista de POIs
+ */
+
+router.get('/load-from-foursquare', loadFromFoursquare);
+
 // GET all POIs
 
 /**

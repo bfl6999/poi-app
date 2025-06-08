@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ poi?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="poi" class="ion-padding">
+  <ion-card>
+    <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI" />
+    <ion-card-header>
+      <ion-card-title>{{ poi.name }}</ion-card-title>
+      <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ poi.description }}</p>
+      <p><strong>Fecha:</strong> {{ poi.dateAdded | date }}</p>
+      <p><strong>Rating Promedio:</strong> {{ averageRating.toFixed(1) }}/5</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>Comentarios</ion-list-header>
+    <ion-item *ngFor="let c of poi.comments">
+      <ion-label>
+        <h3>{{ c.author }}</h3>
+        <p>{{ c.comment }}</p>
+        <p>⭐ {{ c.stars }}/5</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()" *ngIf="user">
+    <ion-item>
+      <ion-label position="stacked">Comentario</ion-label>
+      <ion-textarea formControlName="comment"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Estrellas</ion-label>
+      <ion-range min="1" max="5" step="1" snaps="true" formControlName="stars">
+        <ion-label slot="start">1</ion-label>
+        <ion-label slot="end">5</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-button expand="full" type="submit" [disabled]="commentForm.invalid">Enviar</ion-button>
+  </form>
+</ion-content>

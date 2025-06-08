@@ -1,20 +1,77 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Listado de POIs</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <!-- Formulario de búsqueda -->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Buscar POIs</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input formControlName="name" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Lugar</ion-label>
+          <ion-input formControlName="location" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Fecha</ion-label>
+          <ion-datetime
+            formControlName="date"
+            presentation="date"
+            placeholder="dd/mm/aaaa"
+            display-format="DD/MM/YYYY"
+          ></ion-datetime>
+        </ion-item>
+
+        <ion-button expand="block" type="submit" color="primary">
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+          Buscar
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </form>
+
+  <!-- Lista de POIs -->
+  <ion-list *ngIf="pois.length > 0; else noResults">
+    <ion-card *ngFor="let poi of pois" (click)="goToDetail(poi._id)">
+      <ion-card-header>
+        <ion-card-title>{{ poi.name }}</ion-card-title>
+        <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-text color="medium">
+          <p *ngIf="poi.dateAdded">Fecha: {{ poi.dateAdded | date: 'shortDate' }}</p>
+        </ion-text>
+
+        <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI"
+             style="width: 100%; border-radius: 8px; margin-top: 10px;">
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <ng-template #noResults>
+    <ion-text color="medium" class="ion-text-center">
+      <p>No hay POIs para mostrar.</p>
+    </ion-text>
+  </ng-template>
+
+  <!-- Botón flotante para añadir POI si está logueado -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isAuthenticated()">
+    <ion-fab-button (click)="goToAddPoi()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

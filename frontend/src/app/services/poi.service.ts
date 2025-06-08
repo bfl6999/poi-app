@@ -1,30 +1,40 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Poi } from '../models/poi.model';
 import { environment } from '../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class PoiService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/pois`;
 
   constructor(private http: HttpClient) {}
 
-  getAllPOIs() {
-    return this.http.get(`${this.apiUrl}/pois`);
+  getAllPOIs(filters: { name?: string; location?: string; date?: string } = {}): Observable<Poi[]> {
+    let params = new HttpParams();
+
+    if (filters.name) params = params.set('name', filters.name);
+    if (filters.location) params = params.set('location', filters.location);
+    if (filters.date) params = params.set('date', filters.date);
+
+    return this.http.get<Poi[]>(this.apiUrl, { params });
   }
 
-  getPOI(id: string) {
-    return this.http.get(`${this.apiUrl}/pois/${id}`);
+  getPOI(id: string): Observable<Poi> {
+    return this.http.get<Poi>(`${this.apiUrl}/${id}`);
   }
 
-  addPOI(poi: any) {
-    return this.http.post(`${this.apiUrl}/pois`, poi);
+  addPOI(poi: Poi): Observable<Poi> {
+    return this.http.post<Poi>(this.apiUrl, poi);
   }
 
-  addComment(poiId: string, comment: any) {
-    return this.http.post(`${this.apiUrl}/pois/${poiId}/comments`, comment);
+  addComment(poiId: string, comment: { author: string; comment: string; stars: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${poiId}/comments`, comment);
   }
 
-  deletePOI(id: string) {
-    return this.http.delete(`${this.apiUrl}/pois/${id}`);
+  deletePOI(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

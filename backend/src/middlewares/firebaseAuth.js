@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 // Inicializa Firebase Admin con tu clave privada
-const serviceAccount = require('../firebase-adminsdk.json'); // Ruta al archivo descargado desde Firebase
+const serviceAccount = require('c:/projects/secretFire/firebase-adminsdk.json'); // Ruta al archivo descargado desde Firebase
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
