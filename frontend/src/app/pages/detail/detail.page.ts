@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PoiService } from 'src/app/services/poi.service';
 import { Poi } from 'src/app/models/poi.model';
-import { Auth, onAuthStateChanged, User } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged, User, signOut } from '@angular/fire/auth';
+import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
@@ -14,13 +15,15 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './detail.page.html',
   styleUrls: ['./detail.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule],
 })
 export class DetailPage implements OnInit {
   poi: Poi | null = null;
   poiId: string = '';
   commentForm!: FormGroup;
   user: User | null = null;
+
+  private router = inject(Router);
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +38,7 @@ export class DetailPage implements OnInit {
     this.loadPoi();
 
     this.commentForm = this.fb.group({
+      username: [''], 
       comment: ['', Validators.required],
       stars: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
     });
@@ -54,10 +58,12 @@ export class DetailPage implements OnInit {
   }
 
   submitComment() {
-    if (this.commentForm.invalid || !this.user) return;
+    if (this.commentForm.invalid) return; // || !this.user
+
+    const author = this.user?.displayName || this.commentForm.value.username?.trim() || 'Anónimo';
 
     const comment = {
-      author: this.user.displayName || 'Anónimo',
+      author: author, //this.user.displayName || this.commentForm.value.username,
       comment: this.commentForm.value.comment,
       stars: this.commentForm.value.stars,
     };
@@ -68,6 +74,15 @@ export class DetailPage implements OnInit {
         this.loadPoi();
       },
       error: (err) => console.error('Error al comentar', err),
+    });
+  }
+
+    isAuthenticated(): boolean {
+    return this.user !== null;
+  }
+  logout() {
+    signOut(this.auth).then(() => {
+      this.router.navigate(['/home']);
     });
   }
 }

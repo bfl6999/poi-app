@@ -6,6 +6,15 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+      El nombre es obligatorio (mínimo 3 caracteres).
+    </ion-text>
+
     <ion-item>
       <ion-label position="floating">Correo Electrónico</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
@@ -14,12 +23,34 @@
       Ingresa un correo válido.
     </ion-text>
 
+    <!-- Password -->
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
+      <ion-input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+      ></ion-input>
+      <ion-button fill="clear" size="small" slot="end" (click)="togglePasswordVisibility()">
+        <ion-icon [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+      </ion-button>
     </ion-item>
     <ion-text color="danger" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
       La contraseña debe tener al menos 6 caracteres.
+    </ion-text>
+
+    <!-- Confirm Password -->
+    <ion-item>
+      <ion-label position="floating">Confirmar Contraseña</ion-label>
+      <ion-input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="confirmPassword"
+      ></ion-input>
+      <ion-button fill="clear" size="small" slot="end" (click)="togglePasswordVisibility()">
+        <ion-icon [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-text color="danger" *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">
+      Las contraseñas no coinciden.
     </ion-text>
 
     <ion-button expand="full" type="submit" [disabled]="registerForm.invalid">

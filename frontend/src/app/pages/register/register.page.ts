@@ -1,6 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -18,13 +26,29 @@ export class RegisterPage {
   private loadingController = inject(LoadingController);
   private router = inject(Router);
 
-  registerForm = new FormGroup({
-    // name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)])
-  });
+  showPassword = false;
 
-  constructor() {}
+  registerForm = new FormGroup(
+    {
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required])
+    },
+    { validators: this.passwordsMatchValidator }
+  );
+
+  constructor() { }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const pass = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return pass === confirm ? null : { passwordMismatch: true };
+  }
 
   async register() {
     if (this.registerForm.invalid) {
@@ -40,15 +64,12 @@ export class RegisterPage {
 
     await loading.present();
 
-    const {email, password } = this.registerForm.value; // name,
+    const { name, email, password } = this.registerForm.value;
 
     try {
-      await this.authService.register(email!, password!);
+      await this.authService.register(name!, email!, password!);
       this.showInfoMessage('Registro exitoso. Redirigiendo...');
-
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
+      setTimeout(() => this.router.navigate(['/home']), 2000);
     } catch (error) {
       this.showErrorMessage('Error al registrar: ' + (error as any).message);
     } finally {

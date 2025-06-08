@@ -94,7 +94,7 @@ router.post('/', auth, async (req, res) => {
  */
 
 // Añadir comentario a un POI
-router.post('/:id/comments', auth, async (req, res) => {
+router.post('/:id/comments', async (req, res) => {
   try {
     const { author, comment, stars } = req.body;
     const poi = await POI.findById(req.params.id);

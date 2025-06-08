@@ -1,6 +1,20 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Listado de POIs</ion-title>
+
+    <ion-buttons slot="end">
+      <ng-container *ngIf="user; else notLoggedIn">
+        <ion-button fill="clear" (click)="logout()">Cerrar sesión</ion-button>
+        <ion-button fill="clear" disabled>
+          {{ user.displayName || user.email }}
+        </ion-button>
+      </ng-container>
+
+      <ng-template #notLoggedIn>
+        <ion-button fill="clear" routerLink="/login">Iniciar sesión</ion-button>
+        <ion-button fill="clear" routerLink="/register">Registrarse</ion-button>
+      </ng-template>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -26,12 +40,8 @@
 
         <ion-item>
           <ion-label>Fecha</ion-label>
-          <ion-datetime
-            formControlName="date"
-            presentation="date"
-            placeholder="dd/mm/aaaa"
-            display-format="DD/MM/YYYY"
-          ></ion-datetime>
+          <ion-datetime formControlName="date" presentation="date" placeholder="dd/mm/aaaa"
+            display-format="DD/MM/YYYY"></ion-datetime>
         </ion-item>
 
         <ion-button expand="block" type="submit" color="primary">
@@ -54,9 +64,6 @@
         <ion-text color="medium">
           <p *ngIf="poi.dateAdded">Fecha: {{ poi.dateAdded | date: 'shortDate' }}</p>
         </ion-text>
-
-        <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI"
-             style="width: 100%; border-radius: 8px; margin-top: 10px;">
       </ion-card-content>
     </ion-card>
   </ion-list>

@@ -1,16 +1,31 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ poi?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ng-container *ngIf="user as u; else notLoggedIn">
+        <ion-button fill="clear" (click)="logout()">Cerrar sesión</ion-button>
+        <ion-button fill="clear" disabled>
+          {{ u.displayName || u.email }}
+        </ion-button>
+      </ng-container>
+
+      <ng-template #notLoggedIn>
+        <ion-button fill="clear" routerLink="/login">Iniciar sesión</ion-button>
+        <ion-button fill="clear" routerLink="/register">Registrarse</ion-button>
+      </ng-template>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="poi" class="ion-padding">
   <ion-card>
-    <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI" />
+    <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI"
+      style="width: 50%; border-radius: 8px; margin-top: 10px;" />
     <ion-card-header>
       <ion-card-title>{{ poi.name }}</ion-card-title>
       <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
     </ion-card-header>
+
     <ion-card-content>
       <p>{{ poi.description }}</p>
       <p><strong>Fecha:</strong> {{ poi.dateAdded | date }}</p>
@@ -29,12 +44,30 @@
     </ion-item>
   </ion-list>
 
-  <form [formGroup]="commentForm" (ngSubmit)="submitComment()" *ngIf="user">
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+    <ng-container *ngIf="!user; else loggedInBlock">
+      <ion-item>
+        <ion-label position="stacked">Usuario</ion-label>
+        <ion-input formControlName="username"></ion-input>
+      </ion-item>
+    </ng-container>
+
+    <ng-template #loggedInBlock>
+      <ng-container *ngIf="user as u">
+        <ion-item>
+          <ion-label>
+            Comentando como: <strong>{{ u.displayName }}</strong>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ng-template>
+
     <ion-item>
       <ion-label position="stacked">Comentario</ion-label>
       <ion-textarea formControlName="comment"></ion-textarea>
     </ion-item>
     <ion-item>
+
       <ion-label position="stacked">Estrellas</ion-label>
       <ion-range min="1" max="5" step="1" snaps="true" formControlName="stars">
         <ion-label slot="start">1</ion-label>

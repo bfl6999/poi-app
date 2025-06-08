@@ -45,7 +45,7 @@ export class LoginPage {
       this.showInfoMessage('Inicio de sesión realizado. Redirigiendo...'); 
 
       setTimeout(() => {
-        this.router.navigate(["/register"]);
+        this.router.navigate(["/home"]);
       }, 2000);
 
     } catch (error) {

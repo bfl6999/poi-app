@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { PoiService } from 'src/app/services/poi.service';
 import { Poi } from '../models/poi.model';
 import { RouterModule, Router } from '@angular/router';
-import { Auth, onAuthStateChanged, User } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged, User, signOut } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -65,5 +65,10 @@ export class HomePage implements OnInit {
 
   isAuthenticated(): boolean {
     return this.user !== null;
+  }
+  logout() {
+    signOut(this.auth).then(() => {
+      this.router.navigate(['/home']);
+    });
   }
 }

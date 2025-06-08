@@ -43,6 +43,7 @@ const poiSchema = new mongoose.Schema({
     lat: Number,
     lng: Number,
   },
+  rating : Number,
   geo: {
   type: {
     type: String,

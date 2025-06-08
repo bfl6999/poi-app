@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, User, user, createUserWithEmailAndPassword  } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, User, user, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -18,16 +18,19 @@ export class AuthService {
     this.user$.next(userCredential.user);
     return userCredential;
   }
-  async register(email: string, password: string) {
-    await createUserWithEmailAndPassword(this.auth, email, password).then((userCredential) => {
-    // Signed up 
+  async register(name: string, email: string, password: string) {
+    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
     const user = userCredential.user;
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+
+    // Aquí se actualiza el perfil con el nombre introducido
+    await updateProfile(user, {
+      displayName: name
+    });
+
+    this.user$.next(user);
+    return user;
   }
+
   async logout() {
     await this.auth.signOut();
     this.user$.next(null);
