@@ -17,6 +17,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Rutas
 app.use('/api/pois', poiRoutes);
+app.use('/api/foursquare', require('./routes/foursquare.routes'));
 
 // Conexión Mongo
 mongoose.connect(process.env.MONGO_URI, {

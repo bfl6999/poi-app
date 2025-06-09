@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ poi?.name }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ng-container *ngIf="user as u; else notLoggedIn">
         <ion-button fill="clear" (click)="logout()">Cerrar sesión</ion-button>
@@ -32,7 +35,6 @@
       <p><strong>Rating Promedio:</strong> {{ averageRating.toFixed(1) }}/5</p>
     </ion-card-content>
   </ion-card>
-
   <ion-list>
     <ion-list-header>Comentarios</ion-list-header>
     <ion-item *ngFor="let c of poi.comments">
@@ -42,6 +44,7 @@
         <p>⭐ {{ c.stars }}/5</p>
       </ion-label>
     </ion-item>
+
   </ion-list>
 
   <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
@@ -76,4 +79,7 @@
     </ion-item>
     <ion-button expand="full" type="submit" [disabled]="commentForm.invalid">Enviar</ion-button>
   </form>
+  <ion-button fill="outline" color="danger" *ngIf="canDeletePoi" (click)="deletePoi()">
+    Eliminar POI
+  </ion-button>
 </ion-content>

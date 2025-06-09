@@ -120,13 +120,18 @@ router.post('/:id/comments', async (req, res) => {
  *         description: POI eliminado
  */
 
+
 router.delete('/:id', auth, async (req, res) => {
-  try {
-    await POI.findByIdAndDelete(req.params.id);
-    res.status(204).send();
-  } catch (err) {
-    res.status(500).json({ error: 'Error al eliminar POI' });
+  const poi = await POI.findById(req.params.id);
+  if (!poi) return res.status(404).json({ error: 'POI no encontrado' });
+
+  if (poi.insertedBy !== req.user.uid) {
+    return res.status(403).json({ error: 'No autorizado para eliminar este POI' });
   }
+
+  await poi.remove();
+  res.json({ message: 'POI eliminado' });
 });
+
 
 module.exports = router;

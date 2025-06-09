@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NewPagePage } from './new-page.page';
+import { SearchPoiPage } from './search-poi.page';
 
-describe('NewPagePage', () => {
-  let component: NewPagePage;
-  let fixture: ComponentFixture<NewPagePage>;
+describe('SearchPoiPage', () => {
+  let component: SearchPoiPage;
+  let fixture: ComponentFixture<SearchPoiPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewPagePage);
+    fixture = TestBed.createComponent(SearchPoiPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Buscar POIs en Foursquare</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Campos de búsqueda -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Búsqueda</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Nombre del lugar</ion-label>
+        <ion-input [(ngModel)]="query" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Ciudad</ion-label>
+        <ion-input [(ngModel)]="city" type="text"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" color="primary" (click)="search()">
+        <ion-icon name="search-outline" slot="start"></ion-icon>
+        Buscar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Resultados de búsqueda -->
+  <ion-list *ngIf="results.length > 0">
+    <ion-list-header>
+      <ion-label>Resultados encontrados</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let poi of results">
+      <ion-label>
+        <h2>{{ poi.name }}</h2>
+        <p>
+          {{ poi.location?.address || 'Sin dirección' }}<br>
+          Lat: {{ poi.geocodes?.main?.latitude }} | Lng: {{ poi.geocodes?.main?.longitude }}
+        </p>
+      </ion-label>
+      <ion-button fill="outline" slot="end" size="small" (click)="addPOIFromFS(poi)">
+        Insertar
+      </ion-button>

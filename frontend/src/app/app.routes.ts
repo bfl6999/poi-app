@@ -11,10 +11,6 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'new-page',
-    loadComponent: () => import('./new-page/new-page.page').then( m => m.NewPagePage)
-  },
-  {
     path: 'register',
     loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
   },
@@ -29,5 +25,9 @@ export const routes: Routes = [
   {
     path: 'add-poi',
     loadComponent: () => import('./pages/add-poi/add-poi.page').then( m => m.AddPoiPage)
+  },
+  {
+    path: 'search-poi',
+    loadComponent: () => import('./pages/search-poi/search-poi.page').then( m => m.SearchPoiPage)
   },
 ];

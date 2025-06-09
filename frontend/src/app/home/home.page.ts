@@ -1,11 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, IonIcon } from '@ionic/angular';
 import { PoiService } from 'src/app/services/poi.service';
 import { Poi } from '../models/poi.model';
 import { RouterModule, Router } from '@angular/router';
 import { Auth, onAuthStateChanged, User, signOut } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import { add } from 'ionicons/icons';
+
+
 
 @Component({
   selector: 'app-home',
@@ -14,7 +18,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     IonicModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
@@ -33,6 +37,11 @@ export class HomePage implements OnInit {
     location: [''],
     date: ['']
   });
+
+
+  constructor() {
+    addIcons({ add });
+  }
 
   ngOnInit() {
     onAuthStateChanged(this.auth, user => {
@@ -60,9 +69,13 @@ export class HomePage implements OnInit {
     this.router.navigate(['/poi', id]);
   }
   goToAddPoi() {
-    this.router.navigate(['/pages/add-poi']);
+    this.router.navigate(['/add-poi']);
+  }
+  goToSearchPoi() {
+    this.router.navigate(['/search-poi']);
   }
 
+  
   isAuthenticated(): boolean {
     return this.user !== null;
   }

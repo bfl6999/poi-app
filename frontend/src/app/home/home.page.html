@@ -24,7 +24,7 @@
   <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Buscar POIs</ion-card-title>
+        <ion-card-title>Busqueda local de POIs</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
@@ -52,6 +52,19 @@
     </ion-card>
   </form>
 
+  <!-- Búsqueda externa en Foursquare, solo si el usuario está logueado -->
+  <ion-card *ngIf="isAuthenticated()">
+    <ion-card-header>
+      <ion-card-title>Busqueda de POIs en Foursquare</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button expand="block" (click)="goToSearchPoi()" color="tertiary">
+        <ion-icon name="search" slot="start"></ion-icon>
+        Buscar en Foursquare
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
   <!-- Lista de POIs -->
   <ion-list *ngIf="pois.length > 0; else noResults">
     <ion-card *ngFor="let poi of pois" (click)="goToDetail(poi._id)">

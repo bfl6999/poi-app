@@ -10,7 +10,7 @@ exports.fetchPOIsFromFoursquare = async (query, near) => {
     params: {
       query,
       near,
-      limit: 10,  // puedes ajustarlo o parametrizarlo
+      limit: 10,  // Se puede ajustas o parametrizar
     },
   });
 

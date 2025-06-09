@@ -1,28 +1,19 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class FoursquareService {
-  private baseUrl = 'https://api.foursquare.com/v3/places/search';
-  private apiKey = environment.foursqueareApiKey; // Reemplazar
+  private apiUrl = `${environment.apiUrl}/foursquare`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  searchPlaces(query: string, near: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': this.apiKey,
-      'Accept': 'application/json'
-    });
+  search(query: string, city: string, token: string): Observable<any[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const params = new HttpParams().set('query', query).set('near', city);
 
-    const params = new HttpParams()
-      .set('query', query)
-      .set('near', near)
-      .set('limit', 10);
-
-    return this.http.get(this.baseUrl, { headers, params });
+    return this.http.get<any[]>(`${this.apiUrl}/search`, { headers, params });
   }
+
 }

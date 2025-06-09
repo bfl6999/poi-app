@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Nuevo POI</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -27,7 +30,7 @@
     </ion-item>
 
     <ion-button expand="block" type="submit" [disabled]="poiForm.invalid">
-      Crear POI
+      Guardar POI
     </ion-button>
   </form>
 </ion-content>
