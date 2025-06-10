@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { FoursquareService } from 'src/app/services/foursquare.service';
 import { PoiService } from 'src/app/services/poi.service';
 import { Auth, User, onAuthStateChanged, getIdToken } from '@angular/fire/auth';
+import { Poi } from 'src/app/models/poi.model'; // Asegúrate de importar el modelo correcto
 
 @Component({
   selector: 'app-search-poi',
@@ -59,26 +60,49 @@ export class SearchPoiPage implements OnInit {
   }
 
   async addPOIFromFS(poi: any) {
-    if (!this.user) return;
+    if (!this.user) {
+      alert('Usuario no autenticado.');
+      return;
+    }
 
     try {
       const token = await getIdToken(this.user);
 
-      const newPoi = {
-        name: poi.name,
-        location: poi.location?.address || this.city,
-        latitude: poi.geocodes?.main?.latitude,
-        longitude: poi.geocodes?.main?.longitude,
-        dateAdded: new Date().toISOString()
-      };
+      navigator.geolocation.getCurrentPosition(
+        async pos => {
+          const poiLat = poi.geocodes?.main?.latitude;
+          const poiLng = poi.geocodes?.main?.longitude;
 
-      this.poiService.addPOI(newPoi, token).subscribe({
-        next: () => alert('POI insertado desde Foursquare'),
-        error: err => {
-          console.error('Error insertando POI', err);
-          alert('Error al insertar el POI.');
+          const newPoi: Poi = {
+            name: poi.name,
+            location: poi.location?.address || this.city,
+            imageUrl: poi.location?.formatted_address || '',
+            coordinates: {
+              lat: poiLat,
+              lng: poiLng
+            },
+            geo: {
+              type: 'Point',
+              coordinates: [poiLng, poiLat]
+            },
+            insertedBy: this.user!.uid,
+            source: 'foursquare',
+            dateAdded: new Date().toISOString()
+          };
+
+          this.poiService.addPOI(newPoi, token).subscribe({
+            next: () => alert('POI insertado desde Foursquare'),
+            error: err => {
+              console.error('Error insertando POI', err);
+              alert('Error al insertar el POI.');
+            }
+          });
+        },
+        err => {
+          console.error('Error obteniendo ubicación del usuario', err);
+          alert('No se pudo obtener la ubicación actual.');
         }
-      });
+      );
     } catch (error) {
       console.error('Error obteniendo token para insertar POI:', error);
     }

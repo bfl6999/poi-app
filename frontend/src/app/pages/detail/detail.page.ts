@@ -59,10 +59,14 @@ export class DetailPage implements OnInit {
   }
 
   evaluateCanDelete() {
+    console.log('ME EJECUTO?:');
+
     if (!this.user || !this.poi) {
       this.canDeletePoi = false;
       return;
     }
+    console.log('POI insertedBy:', this.poi.insertedBy);
+    console.log('Current user uid:', this.user.uid);
     this.canDeletePoi = this.poi.insertedBy === this.user.uid;
   }
 
