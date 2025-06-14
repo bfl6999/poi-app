@@ -10,6 +10,9 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { defineCustomElements } from '@ionic/pwa-elements/loader'; 
+
+defineCustomElements(window);
 
 bootstrapApplication(AppComponent, {
   providers: [

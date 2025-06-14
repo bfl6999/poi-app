@@ -25,9 +25,26 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">URL de imagen</ion-label>
+      <ion-label position="floating">Latitud</ion-label>
+      <ion-input type="number" formControlName="lat"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Longitud</ion-label>
+      <ion-input type="number" formControlName="lng"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Imagen (URL o automática)</ion-label>
       <ion-input formControlName="imageUrl"></ion-input>
     </ion-item>
+
+    <ion-button expand="block" (click)="takePicture()">Usar cámara</ion-button>
+
+    <div *ngIf="imagePreview">
+      <p>Previsualización de la imagen:</p>
+      <img [src]="imagePreview" style="width: 100%; max-height: 300px;" />
+    </div>
 
     <ion-button expand="block" type="submit" [disabled]="poiForm.invalid">
       Guardar POI

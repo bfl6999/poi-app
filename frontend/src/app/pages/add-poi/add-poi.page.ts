@@ -1,21 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Auth, onAuthStateChanged, User, getIdToken } from '@angular/fire/auth';
 import { PoiService } from 'src/app/services/poi.service';
 import { Poi } from 'src/app/models/poi.model';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-poi',
   templateUrl: './add-poi.page.html',
   styleUrls: ['./add-poi.page.scss'],
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule, CommonModule]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
 export class AddPoiPage implements OnInit {
   poiForm!: FormGroup;
   user: User | null = null;
+  imagePreview?: SafeResourceUrl;
+
+  private sanitizer = inject(DomSanitizer);
 
   constructor(
     private fb: FormBuilder,
@@ -32,50 +38,72 @@ export class AddPoiPage implements OnInit {
       name: ['', Validators.required],
       location: ['', Validators.required],
       description: [''],
-      imageUrl: ['']
+      imageUrl: [''],
+      lat: ['', Validators.required],
+      lng: ['', Validators.required]
+    });
+
+    navigator.geolocation.getCurrentPosition(pos => {
+      this.poiForm.patchValue({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      });
     });
   }
 
-  submit() {
+  async takePicture() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 100,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera
+      });
+
+      if (image.webPath) {
+        this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+        this.poiForm.patchValue({ imageUrl: image.webPath });
+      }
+    } catch (error) {
+      console.error('Error al capturar la foto:', error);
+    }
+  }
+
+  async submit() {
     if (this.poiForm.invalid || !this.user) return;
 
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+    const lat = parseFloat(this.poiForm.value.lat);
+    const lng = parseFloat(this.poiForm.value.lng);
 
-        try {
-          const token = await getIdToken(this.user!);
+    try {
+      const token = await getIdToken(this.user!);
 
-          const poi: Poi = {
-            ...this.poiForm.value,
-            insertedBy: this.user!.uid,
-            coordinates: { lat, lng },
-            geo: {
-              type: 'Point',
-              coordinates: [lng, lat]
-            },
-            source: 'form',
-            dateAdded: new Date().toISOString()
-          };
+      const poi: Poi = {
+        name: this.poiForm.value.name,
+        location: this.poiForm.value.location,
+        description: this.poiForm.value.description,
+        imageUrl: this.poiForm.value.imageUrl,
+        insertedBy: this.user!.uid,
+        coordinates: { lat, lng },
+        geo: {
+          type: 'Point',
+          coordinates: [lng, lat]
+        },
+        source: 'form',
+        dateAdded: new Date().toISOString()
+      };
 
-          this.poiService.addPOI(poi, token).subscribe({
-            next: () => {
-              this.poiForm.reset();
-              alert('POI añadido con éxito');
-            },
-            error: err => {
-              console.error('Error al guardar el POI:', err);
-              alert('Error al guardar el POI');
-            }
-          });
-        } catch (error) {
-          console.error('Error obteniendo token:', error);
+      this.poiService.addPOI(poi, token).subscribe({
+        next: () => {
+          this.poiForm.reset();
+          this.imagePreview = undefined;
+          alert('POI añadido con éxito');
+        },
+        error: err => {
+          console.error('Error al guardar el POI:', err);
         }
-      },
-      err => {
-        console.error('No se pudo obtener geolocalización:', err);
-      }
-    );
+      });
+    } catch (err) {
+      console.error('Error al obtener el token:', err);
+    }
   }
 }
