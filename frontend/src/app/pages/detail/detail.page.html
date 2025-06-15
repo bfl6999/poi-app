@@ -43,6 +43,10 @@
         <p>{{ c.comment }}</p>
         <p>⭐ {{ c.stars }}/5</p>
       </ion-label>
+      <ion-button *ngIf="user?.uid && c.userUid === user?.uid" fill="clear" color="danger" size="small"
+        (click)="deleteComment(c._id!)">
+        Eliminar
+      </ion-button>
     </ion-item>
 
   </ion-list>
@@ -79,7 +83,14 @@
     </ion-item>
     <ion-button expand="full" type="submit" [disabled]="commentForm.invalid">Enviar</ion-button>
   </form>
+
+  <!-- Botón de eliminación -->
   <ion-button fill="outline" color="danger" *ngIf="canDeletePoi" (click)="deletePoi()">
     Eliminar POI
   </ion-button>
+
+  <ion-button fill="outline" color="warning" *ngIf="canDeletePoi" [routerLink]="['/edit-poi', poi._id]">
+    Editar POI
+  </ion-button>
+
 </ion-content>

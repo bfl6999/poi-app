@@ -20,6 +20,7 @@ export class AddPoiPage implements OnInit {
   poiForm!: FormGroup;
   user: User | null = null;
   imagePreview?: SafeResourceUrl;
+  imageFile?: Blob;
 
   private sanitizer = inject(DomSanitizer);
 
@@ -54,17 +55,42 @@ export class AddPoiPage implements OnInit {
   async takePicture() {
     try {
       const image = await Camera.getPhoto({
-        quality: 100,
-        resultType: CameraResultType.Uri,
+        quality: 90,
+        resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera
       });
 
-      if (image.webPath) {
-        this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
-        this.poiForm.patchValue({ imageUrl: image.webPath });
+      if (image.dataUrl) {
+        this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(image.dataUrl);
+
+        // Convertir base64 a Blob
+        const blob = await fetch(image.dataUrl).then(res => res.blob());
+        this.imageFile = blob;
       }
     } catch (error) {
       console.error('Error al capturar la foto:', error);
+    }
+  }
+
+  async uploadImage(): Promise<string | null> {
+    if (!this.imageFile) return null;
+
+    const formData = new FormData();
+    formData.append('image', this.imageFile, 'poi-photo.jpg');
+
+    try {
+      const response = await fetch('http://localhost:3000/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) throw new Error('Error subiendo la imagen');
+
+      const data = await response.json();
+      return data.imageUrl;
+    } catch (err) {
+      console.error('Error al subir imagen:', err);
+      return null;
     }
   }
 
@@ -77,11 +103,17 @@ export class AddPoiPage implements OnInit {
     try {
       const token = await getIdToken(this.user!);
 
+      let imageUrl = this.poiForm.value.imageUrl;
+      if (this.imageFile) {
+        const uploadedUrl = await this.uploadImage();
+        if (uploadedUrl) imageUrl = uploadedUrl;
+      }
+
       const poi: Poi = {
         name: this.poiForm.value.name,
         location: this.poiForm.value.location,
         description: this.poiForm.value.description,
-        imageUrl: this.poiForm.value.imageUrl,
+        imageUrl,
         insertedBy: this.user!.uid,
         coordinates: { lat, lng },
         geo: {
@@ -96,6 +128,7 @@ export class AddPoiPage implements OnInit {
         next: () => {
           this.poiForm.reset();
           this.imagePreview = undefined;
+          this.imageFile = undefined;
           alert('POI añadido con éxito');
         },
         error: err => {

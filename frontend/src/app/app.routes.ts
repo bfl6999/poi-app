@@ -30,4 +30,8 @@ export const routes: Routes = [
     path: 'search-poi',
     loadComponent: () => import('./pages/search-poi/search-poi.page').then( m => m.SearchPoiPage)
   },
+  {
+    path: 'edit-poi/:id',
+    loadComponent: () => import('./pages/edit-poi/edit-poi.page').then( m => m.EditPoiPage)
+  },
 ];

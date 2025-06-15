@@ -1,4 +1,5 @@
 export interface Comment {
+   _id?: string;
   author: string;
   comment: string;
   stars: number;
@@ -13,6 +14,7 @@ export interface Comment {
   imageUrl?: string;
   source?: 'form' | 'foursquare';
   createdAt?: string;
+  userUid?:string;
 }
 
 export interface Poi {

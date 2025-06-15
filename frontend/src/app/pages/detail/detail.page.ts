@@ -36,37 +36,37 @@ export class DetailPage implements OnInit {
   ngOnInit() {
     this.commentForm = this.fb.group({
       username: [''],
-      comment: ['', Validators.required],
+      comment: ['', [Validators.required, Validators.maxLength(1000)]],
       stars: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
     });
 
     this.poiId = this.route.snapshot.paramMap.get('id') || '';
-    this.loadUserAndPoi();
-  }
 
-  loadUserAndPoi() {
     onAuthStateChanged(this.auth, user => {
       this.user = user;
+      if (this.poiId) {
+        this.loadPOI();
+      }
+    });
+  }
 
-      this.poiService.getPOI(this.poiId).subscribe({
-        next: (data) => {
-          this.poi = data;
-          this.evaluateCanDelete();
-        },
-        error: (err) => console.error('Error cargando detalle', err),
-      });
+  loadPOI() {
+    console.log(this.poi?.comments); // Prueba error
+    this.poiService.getPOI(this.poiId).subscribe({
+      next: (data) => {
+        this.poi = data;
+        this.evaluateCanDelete();
+      },
+      
+      error: (err) => console.error('Error cargando detalle', err),
     });
   }
 
   evaluateCanDelete() {
-    console.log('ME EJECUTO?:');
-
-    if (!this.user || !this.poi) {
+    if (!this.user || !this.poi || !this.poi.insertedBy) {
       this.canDeletePoi = false;
       return;
     }
-    console.log('POI insertedBy:', this.poi.insertedBy);
-    console.log('Current user uid:', this.user.uid);
     this.canDeletePoi = this.poi.insertedBy === this.user.uid;
   }
 
@@ -77,25 +77,32 @@ export class DetailPage implements OnInit {
   }
 
   submitComment() {
-    if (this.commentForm.invalid) return;
+    if (this.commentForm.invalid || !this.user) return;
 
-    const author = this.user?.displayName || this.commentForm.value.username?.trim() || 'Anónimo';
+    navigator.geolocation.getCurrentPosition(pos => {
+      const comment = {
+        author: this.user?.displayName || this.commentForm.value.username?.trim() || 'Anónimo',
+        userUid: this.user?.uid || null,
+        comment: this.commentForm.value.comment,
+        stars: this.commentForm.value.stars,
+        location: {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        },
+        createdAt: new Date().toISOString()
+      };
 
-    const comment = {
-      author: author,
-      comment: this.commentForm.value.comment,
-      stars: this.commentForm.value.stars,
-    };
-
-    this.poiService.addComment(this.poiId, comment).subscribe({
-      next: () => {
-        this.commentForm.reset({ comment: '', stars: 5 });
-        this.loadUserAndPoi();
-      },
-      error: (err) => console.error('Error al comentar', err),
+      this.poiService.addComment(this.poiId, comment).subscribe({
+        next: () => {
+          this.commentForm.reset({ comment: '', stars: 5 });
+          this.loadPOI(); // recargar para reflejar el nuevo comentario
+        },
+        error: (err) => console.error('Error al comentar', err),
+      });
+    }, err => {
+      alert('No se pudo obtener la ubicación');
     });
   }
-
   isAuthenticated(): boolean {
     return this.user !== null;
   }
@@ -127,6 +134,29 @@ export class DetailPage implements OnInit {
     } catch (error) {
       console.error('Error obteniendo token:', error);
       alert('Error de autenticación');
+    }
+  }
+
+  async deleteComment(commentId: string) {
+    if (!this.user || !this.poiId) return;
+
+    const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este comentario?');
+    if (!confirmDelete) return;
+
+    try {
+      const token = await getIdToken(this.user);
+      this.poiService.deleteComment(this.poiId, commentId, token).subscribe({
+        next: () => {
+          alert('Comentario eliminado');
+          this.loadPOI();
+        },
+        error: err => {
+          console.error('Error eliminando comentario:', err);
+          alert('Error eliminando comentario');
+        }
+      });
+    } catch (err) {
+      console.error('Error autenticando usuario:', err);
     }
   }
 }

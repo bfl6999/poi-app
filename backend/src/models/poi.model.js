@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
   author: { type: String, required: true },
+  userUid: { type: String, required: false },
   comment: { type: String, required: true, maxlength: 1000 },
   stars: { type: Number, required: true, min: 0, max: 5 },
   location: {
@@ -26,14 +27,16 @@ const commentSchema = new mongoose.Schema({
     required: true
   }
 },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
 const poiSchema = new mongoose.Schema({
   name: String,
   location: String,
+  description: String,
   dateAdded: { type: Date, default: Date.now },
   imageUrl: String,
+  insertedBy: { type: String, required: true }, 
   source: {
   type: String,
   enum: ['form', 'foursquare'],

@@ -51,4 +51,19 @@ export class PoiService {
   /**deletePOI(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }**/
-}
+  updatePOI(id: string, poi: Poi, token: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.put(`${this.apiUrl}/${id}`, poi, { headers });
+  }
+
+  deleteComment(poiId: string, commentId: string, token: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.delete(`${this.apiUrl}/${poiId}/comments/${commentId}`, { headers });
+  }
+
+  }
