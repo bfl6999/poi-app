@@ -1,0 +1,13 @@
+::ng-deep .custom-alert .alert-wrapper {
+  border-left: 6px solid red;
+}
+
+::ng-deep .custom-alert .alert-head {
+  background-color: #f44336; // rojo
+  color: white;
+}
+
+::ng-deep .custom-alert .alert-message .error-message {
+  color: #e53935;
+  font-weight: bold;
+}

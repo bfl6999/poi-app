@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mis POIs</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="pois.length; else sinDatos">
+    <ion-card *ngFor="let poi of pois">
+      <ion-card-header>
+        <ion-card-title>{{ poi.name }}</ion-card-title>
+        <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p *ngIf="poi.dateAdded">Fecha: {{ poi.dateAdded | date }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <ng-template #sinDatos>
+    <ion-text color="medium">
+      <p>No has insertado ningún POI aún.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>

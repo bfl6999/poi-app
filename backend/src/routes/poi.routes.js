@@ -4,6 +4,9 @@ const POI = require('../models/poi.model');
 const auth = require('../middlewares/firebaseAuth'); // middleware para usuarios que se registran
 const { loadFromFoursquare } = require('../controllers/foursquare.controller');
 
+//const { ChatGroq } = require('groq-sdk'); // instala si no lo tienes
+// const groq = new ChatGroq({ apiKey: process.env.GROQ_API_KEY });
+const groq = require('../services/groqClient.service');
 
 /**
  * @swagger
@@ -246,4 +249,96 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
+
+router.post('/generate-route', auth, async (req, res) => {
+  try {
+    const { city } = req.body;
+    const userId = req.user.uid;
+
+    if (!city) {
+      return res.status(400).json({ error: 'Ciudad requerida' });
+    }
+
+    const pois = await POI.find({ insertedBy: userId, location: new RegExp(city, 'i') });
+
+    if (!pois.length) {
+      return res.status(404).json({ error: 'No se encontraron POIs para esa ciudad. Inserta alguno!' });
+    }
+
+    const prompt = `
+Eres un guía turístico. Crea una ruta personalizada en ${city} usando los siguientes puntos de interés:
+
+${pois.map(p => `- ${p.name}`).join('\n')}
+
+Devuélvela en el siguiente formato JSON:
+
+{
+  "city": "${city}",
+  "ruta": [
+    {
+      "hora": "09:00",
+      "lugar": "Nombre del lugar",
+      "descripcion": "Descripción breve"
+    }
+  ]
+}
+
+Solo responde con el JSON, sin texto adicional.
+`;
+
+    const response = await groq.chat.completions.create({
+      model: 'llama3-70b-8192',
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: 'Eres un asistente experto en turismo' },
+        { role: 'user', content: prompt }
+      ]
+    });
+
+    const plan = response.choices?.[0]?.message?.content;
+
+    res.json({ routePlan: plan || 'No se pudo generar una ruta' });
+
+  } catch (err) {
+    console.error('Error generando ruta:', err);
+    res.status(500).json({ error: 'Error generando la ruta' });
+  }
+});
+
+
+
+/**
+ * @swagger
+ * /pois/user/{id}:
+ *   put:
+ *     summary: Obtener todos los pois de un usuario especificado
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del POI a actualizar
+ *     responses:
+ *       200:
+ *         description: POIS del usuario
+ */
+
+router.get('/user/:id', auth, async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Verifica si el usuario autenticado es el mismo que se consulta
+    if (req.user.uid !== userId) {
+      return res.status(403).json({ error: 'Acceso no autorizado' });
+    }
+
+    const userPois = await POI.find({ insertedBy: userId }).sort({ dateAdded: -1 });
+
+    res.json(userPois);
+  } catch (error) {
+    console.error('Error obteniendo POIs del usuario:', error);
+    res.status(500).json({ error: 'Error obteniendo POIs del usuario' });
+  }
+});
 module.exports = router;

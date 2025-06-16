@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Generar Ruta Personalizada</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="generate()">
+    <ion-item>
+      <ion-label position="stacked">Ciudad</ion-label>
+      <ion-input formControlName="city"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="form.invalid || loading">
+      Generar Ruta
+    </ion-button>
+    <ion-button expand="full" color="medium" (click)="clearRoute()" *ngIf="routeResult || errorMessage">
+      Limpiar Ruta
+    </ion-button>
+
+  </form>
+
+  <ion-card *ngIf="routeResult">
+    <ion-card-header>
+      <ion-card-title>Ruta por {{ routeResult.city }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let paso of routeResult.ruta">
+          <ion-label>
+            <h3>{{ paso.hora }} – {{ paso.lugar }}</h3>
+            <p>{{ paso.descripcion }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

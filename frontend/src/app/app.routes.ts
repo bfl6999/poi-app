@@ -34,4 +34,12 @@ export const routes: Routes = [
     path: 'edit-poi/:id',
     loadComponent: () => import('./pages/edit-poi/edit-poi.page').then( m => m.EditPoiPage)
   },
+  {
+    path: 'generate-route',
+    loadComponent: () => import('./pages/generate-route/generate-route.page').then( m => m.GenerateRoutePage)
+  },
+  {
+    path: 'user-pois',
+    loadComponent: () => import('./pages/user-pois/user-pois.page').then( m => m.UserPoisPage)
+  },
 ];

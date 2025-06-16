@@ -5,9 +5,9 @@ import { PoiService } from 'src/app/services/poi.service';
 import { Poi } from '../models/poi.model';
 import { RouterModule, Router } from '@angular/router';
 import { Auth, onAuthStateChanged, User, signOut } from '@angular/fire/auth';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
+import { add, search, navigate, person } from 'ionicons/icons';
 
 
 
@@ -19,6 +19,7 @@ import { add } from 'ionicons/icons';
     IonicModule,
     RouterModule,
     ReactiveFormsModule,
+    FormsModule,  
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
@@ -31,6 +32,7 @@ export class HomePage implements OnInit {
 
   pois: Poi[] = [];
   user: User | null = null;
+  searchType: 'name' | 'location' | 'date' | '' = '';
 
   searchForm: FormGroup = this.fb.group({
     name: [''],
@@ -40,7 +42,7 @@ export class HomePage implements OnInit {
 
 
   constructor() {
-    addIcons({ add });
+    addIcons({ add, search, navigate, person });
   }
 
   ngOnInit() {

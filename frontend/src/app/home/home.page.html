@@ -1,7 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Listado de POIs</ion-title>
-
+    <ion-title>POIs</ion-title>
     <ion-buttons slot="end">
       <ng-container *ngIf="user; else notLoggedIn">
         <ion-button fill="clear" (click)="logout()">Cerrar sesión</ion-button>
@@ -9,7 +8,6 @@
           {{ user.displayName || user.email }}
         </ion-button>
       </ng-container>
-
       <ng-template #notLoggedIn>
         <ion-button fill="clear" routerLink="/login">Iniciar sesión</ion-button>
         <ion-button fill="clear" routerLink="/register">Registrarse</ion-button>
@@ -20,59 +18,52 @@
 
 <ion-content class="ion-padding">
 
-  <!-- Formulario de búsqueda -->
-  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Busqueda local de POIs</ion-card-title>
-      </ion-card-header>
+  <!-- Búsqueda -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Buscar POIs</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Buscar por</ion-label>
+        <ion-select [(ngModel)]="searchType" placeholder="Selecciona filtro">
+          <ion-select-option value="name">Nombre</ion-select-option>
+          <ion-select-option value="location">Lugar</ion-select-option>
+          <ion-select-option value="date">Fecha</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-      <ion-card-content>
-        <ion-item>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="ion-margin-top">
+        <ion-item *ngIf="searchType === 'name'">
           <ion-label position="floating">Nombre</ion-label>
           <ion-input formControlName="name" type="text"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="searchType === 'location'">
           <ion-label position="floating">Lugar</ion-label>
           <ion-input formControlName="location" type="text"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="searchType === 'date'">
           <ion-label>Fecha</ion-label>
-          <ion-datetime formControlName="date" presentation="date" placeholder="dd/mm/aaaa"
-            display-format="DD/MM/YYYY"></ion-datetime>
+          <ion-datetime formControlName="date" presentation="date"></ion-datetime>
         </ion-item>
 
-        <ion-button expand="block" type="submit" color="primary">
+        <ion-button expand="block" type="submit" color="primary" class="ion-margin-top">
           <ion-icon name="search-outline" slot="start"></ion-icon>
           Buscar
         </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </form>
-
-  <!-- Búsqueda externa en Foursquare, solo si el usuario está logueado -->
-  <ion-card *ngIf="isAuthenticated()">
-    <ion-card-header>
-      <ion-card-title>Busqueda de POIs en Foursquare</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-button expand="block" (click)="goToSearchPoi()" color="tertiary">
-        <ion-icon name="search" slot="start"></ion-icon>
-        Buscar en Foursquare
-      </ion-button>
+      </form>
     </ion-card-content>
   </ion-card>
-  <!-- Lista de POIs -->
+
+  <!-- Resultados -->
   <ion-list *ngIf="pois.length > 0; else noResults">
     <ion-card *ngFor="let poi of pois" (click)="goToDetail(poi._id)">
       <ion-card-header>
         <ion-card-title>{{ poi.name }}</ion-card-title>
         <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
       </ion-card-header>
-
       <ion-card-content>
         <ion-text color="medium">
           <p *ngIf="poi.dateAdded">Fecha: {{ poi.dateAdded | date: 'shortDate' }}</p>
@@ -86,12 +77,28 @@
       <p>No hay POIs para mostrar.</p>
     </ion-text>
   </ng-template>
-
-  <!-- Botón flotante para añadir POI si está logueado -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isAuthenticated()">
-    <ion-fab-button (click)="goToAddPoi()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
 </ion-content>
+
+<ion-footer *ngIf="isAuthenticated()">
+  <ion-toolbar>
+    <ion-buttons class="action-toolbar" expand="block">
+      <ion-button routerLink="/add-poi" fill="clear">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Añadir POI
+      </ion-button>
+      <ion-button routerLink="/search-poi" fill="clear">
+        <ion-icon name="search" slot="start"></ion-icon>
+        Buscar
+      </ion-button>
+      <ion-button routerLink="/generate-route" fill="clear">
+        <ion-icon name="navigate" slot="start"></ion-icon>
+        Ruta
+      </ion-button>
+      <ion-button routerLink="/user-pois" fill="clear">
+        <ion-icon name="person" slot="start"></ion-icon>
+        Mis POIs
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
+
