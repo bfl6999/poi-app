@@ -4,7 +4,6 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
@@ -39,14 +38,26 @@
       <ion-label>Resultados encontrados</ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let poi of results">
+    <ion-item *ngFor="let poi of results" (click)="toggleSelection(poi)">
       <ion-label>
         <h2>{{ poi.name }}</h2>
         <p>
-          {{ poi.location?.address || 'Sin dirección' }}<br>
-          Lat: {{ poi.geocodes?.main?.latitude }} | Lng: {{ poi.geocodes?.main?.longitude }}
+          {{ poi.location?.formatted_address || 'Sin dirección' }}<br>
+          Lat: {{ poi.geocodes?.main?.latitude }} |
+          Lng: {{ poi.geocodes?.main?.longitude }}
         </p>
       </ion-label>
-      <ion-button fill="outline" slot="end" size="small" (click)="addPOIFromFS(poi)">
-        Insertar
-      </ion-button>
+      <ion-checkbox slot="end" [checked]="selectedPOIs.includes(poi)"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-button
+    expand="block"
+    color="success"
+    *ngIf="selectedPOIs.length > 0"
+    (click)="saveSelectedPOIs()"
+  >
+    <ion-icon name="save-outline" slot="start"></ion-icon>
+    Guardar seleccionados ({{ selectedPOIs.length }})
+  </ion-button>
+</ion-content>

@@ -31,7 +31,7 @@ export class DetailPage implements OnInit {
     private poiService: PoiService,
     private fb: FormBuilder,
     private auth: Auth
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.commentForm = this.fb.group({
@@ -57,7 +57,7 @@ export class DetailPage implements OnInit {
         this.poi = data;
         this.evaluateCanDelete();
       },
-      
+
       error: (err) => console.error('Error cargando detalle', err),
     });
   }
@@ -77,7 +77,7 @@ export class DetailPage implements OnInit {
   }
 
   submitComment() {
-    if (this.commentForm.invalid || !this.user) return;
+    if (this.commentForm.invalid) return;
 
     navigator.geolocation.getCurrentPosition(pos => {
       const comment = {
@@ -158,5 +158,9 @@ export class DetailPage implements OnInit {
     } catch (err) {
       console.error('Error autenticando usuario:', err);
     }
+  }
+  isIconImage(url: string): boolean {
+    if (!url) return false;
+    return url.includes('categories') || url.includes('/icons/') || url.includes('default');
   }
 }

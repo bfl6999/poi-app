@@ -7,6 +7,7 @@ const { loadFromFoursquare } = require('../controllers/foursquare.controller');
 //const { ChatGroq } = require('groq-sdk'); // instala si no lo tienes
 // const groq = new ChatGroq({ apiKey: process.env.GROQ_API_KEY });
 const groq = require('../services/groqClient.service');
+const axios = require('axios');
 
 /**
  * @swagger
@@ -82,7 +83,7 @@ router.post('/', auth, async (req, res) => {
   try {
     const body = {
       ...req.body,
-      insertedBy: req.user.uid  // 🔒 garantizado por el middleware auth
+      insertedBy: req.user.uid
     };
 
     const poi = new POI(body);
@@ -96,7 +97,7 @@ router.post('/', auth, async (req, res) => {
 
 /**
  * @swagger
- * /pois:
+ * /pois/:id/comments:
  *   post:
  *     summary: Crear un nuevo comentario a un POI (requiere token)
  *     security:
@@ -249,6 +250,23 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /generate-route:
+ *   post:
+ *     summary: Generar una ruta usando Groq (requiere token)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         city: name of city
+ *         userId: user UID
+ *         required: true
+ *         description: Generate planing of day with POIs of user added
+ *     responses:
+ *       200:
+ *         description: Ruta en JSON
+ */
 
 router.post('/generate-route', auth, async (req, res) => {
   try {
@@ -335,10 +353,86 @@ router.get('/user/:id', auth, async (req, res) => {
 
     const userPois = await POI.find({ insertedBy: userId }).sort({ dateAdded: -1 });
 
-    res.json(userPois);
+    res.json(userPois); 
   } catch (error) {
     console.error('Error obteniendo POIs del usuario:', error);
     res.status(500).json({ error: 'Error obteniendo POIs del usuario' });
   }
 });
+
+/**
+ * @swagger
+ * /pois/import-foursquare:
+ *   post:
+ *     summary: Agregar varios pois
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         required: true
+ *         description: POIs a agregar
+ *     responses:
+ *       200:
+ *         description: Ok, POIs agregados
+ */
+
+router.post('/import-foursquare', auth, async (req, res) => {
+  const { fsqIds } = req.body;
+  if (!Array.isArray(fsqIds)) {
+    return res.status(400).json({ error: 'Debes proporcionar un array de fsqIds' });
+  }
+
+  try {
+    const results = [];
+
+    for (const fsq_id of fsqIds) {
+      const detailRes = await axios.get(`https://api.foursquare.com/v3/places/${fsq_id}`, {
+        headers: {
+          Authorization: process.env.FOURSQUARE_API_KEY
+        }
+      });
+
+      const place = detailRes.data;
+
+      const poiLat = place.geocodes?.main?.latitude;
+      const poiLng = place.geocodes?.main?.longitude;
+
+      const photo = place.photos?.[0];
+      const categoryIcon = place.categories?.[0]?.icon;
+
+      const imageUrl = photo
+        ? `${photo.prefix}original${photo.suffix}`
+        : categoryIcon
+          ? `${categoryIcon.prefix}64${categoryIcon.suffix}`
+          : '';
+
+      const newPoi = new POI({
+        name: place.name,
+        description: place.description || '',
+        location: place.location?.formatted_address || '',
+        coordinates: {
+          lat: poiLat,
+          lng: poiLng
+        },
+        geo: {
+          type: 'Point',
+          coordinates: [poiLng, poiLat]
+        },
+        imageUrl,
+        source: 'foursquare',
+        insertedBy: req.user.uid,
+        dateAdded: new Date().toISOString()
+      });
+
+      await newPoi.save();
+      results.push(newPoi);
+    }
+
+    res.status(201).json(results);
+  } catch (err) {
+    console.error('Error importando desde Foursquare:', err);
+    res.status(500).json({ error: 'Error importando POIs desde Foursquare' });
+  }
+});
+
 module.exports = router;

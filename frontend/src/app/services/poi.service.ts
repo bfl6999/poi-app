@@ -72,4 +72,8 @@ export class PoiService {
     });
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`, { headers });
   }
+  addMultiplePOIsFromFsqIds(fsqIds: string[], token: string) {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post<any[]>(`${this.apiUrl}/import-foursquare`, { fsqIds }, { headers });
+  }
 }

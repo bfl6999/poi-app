@@ -1,0 +1,20 @@
+.poi-image-real {
+  width: 70%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 16px auto;
+  display: block;
+}
+
+.poi-image-icon {
+  background-color: #979797;
+  padding: 10px;
+  border-radius: 12px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin: 16px auto;
+  display: block;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+}

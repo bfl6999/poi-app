@@ -22,8 +22,8 @@
 
 <ion-content *ngIf="poi" class="ion-padding">
   <ion-card>
-    <img *ngIf="poi.imageUrl" [src]="poi.imageUrl" alt="Imagen del POI"
-      style="width: 50%; border-radius: 8px; margin-top: 10px;" />
+    <img *ngIf="poi.imageUrl" [src]="poi.imageUrl"
+      [ngClass]="isIconImage(poi.imageUrl) ? 'poi-image-icon' : 'poi-image-real'" alt="Imagen del POI" />
     <ion-card-header>
       <ion-card-title>{{ poi.name }}</ion-card-title>
       <ion-card-subtitle>{{ poi.location }}</ion-card-subtitle>
