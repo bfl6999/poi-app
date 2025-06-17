@@ -25,6 +25,7 @@ module.exports = {
         bearerAuth: []
       }
     ]
+    // no 'security' aquí, solo en endpoints específicos
   },
-  apis: ['./routes/*.js'],
+  apis: ['./src/routes/*.js'],
 };

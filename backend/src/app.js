@@ -8,7 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = require('./docs/swaggerOptions');
 
 const uploadRoutes = require('./routes/upload.routes');
-const path = require('path'); // ⬅️ Necesario para servir archivos
+const path = require('path'); // Necesario para servir archivos
 
 const app = express();
 app.use(cors());
