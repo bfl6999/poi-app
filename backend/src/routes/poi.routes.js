@@ -6,7 +6,14 @@ const { loadFromFoursquare } = require('../controllers/foursquare.controller');
 
 //const { ChatGroq } = require('groq-sdk'); // instala si no lo tienes
 // const groq = new ChatGroq({ apiKey: process.env.GROQ_API_KEY });
-const groq = require('../services/groqClient.service');
+
+let groq;
+try {
+  groq = require('../services/groqClient.service');
+} catch (error) {
+  console.warn('[WARN] Groq no disponible. Algunas rutas serán omitidas.');
+  groq = null;
+}
 const axios = require('axios');
 
 /**
@@ -28,6 +35,23 @@ router.get('/load-from-foursquare', loadFromFoursquare);
  * /pois:
  *   get:
  *     summary: Obtener todos los POIs
+ *     tags: [POIs]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filtrar por nombre
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filtrar por ubicación
+ *       - in: query
+ *         name: date
+ *         schema:
+ *           type: string
+ *         description: Filtrar desde una fecha (YYYY-MM-DD)
  *     responses:
  *       200:
  *         description: Lista de POIs
@@ -49,13 +73,21 @@ router.get('/', async (req, res) => {
 
 /**
  * @swagger
- * /pois:
+ * /pois/{id}:
  *   get:
- *     summary: Obtener un POI con el ID pasado por parametro
+ *     summary: Obtener un POI por su ID
+ *     tags: [POIs]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Encontrar POI por id
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: POI que se busca
- *       400:
+ *         description: POI encontrado
+ *       404:
  *         description: POI no encontrado
  */
 
@@ -71,13 +103,39 @@ router.get('/:id', async (req, res) => {
  * @swagger
  * /pois:
  *   post:
- *     summary: Crear un nuevo POI (requiere token)
+ *     summary: Crear un nuevo POI
+ *     tags: [POIs]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
+ *               coordinates:
+ *                 type: object
+ *                 properties:
+ *                   lat:
+ *                     type: number
+ *                   lng:
+ *                     type: number
+ *               geo:
+ *                 type: object
  *     responses:
  *       201:
  *         description: POI creado
  */
+
 
 router.post('/', auth, async (req, res) => {
   try {
@@ -97,14 +155,30 @@ router.post('/', auth, async (req, res) => {
 
 /**
  * @swagger
- * /pois/:id/comments:
+ * /pois/{id}/comments:
  *   post:
- *     summary: Crear un nuevo comentario a un POI (requiere token)
- *     security:
- *       - bearerAuth: []
+ *     summary: Añadir un comentario a un POI
+ *     tags: [Comentarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               author:
+ *                 type: string
+ *               comment:
+ *                 type: string
+ *               stars:
+ *                 type: integer
+ *               location:
+ *                 type: string
+ *               userUid:
+ *                 type: string
  *     responses:
  *       201:
- *         description: comentario en POI creado
+ *         description: Comentario añadido
  */
 
 // Añadir comentario a un POI
@@ -140,22 +214,27 @@ router.post('/:id/comments', async (req, res) => {
 
 /**
  * @swagger
- * /pois/{poiId}/comments/{commentId}:
+ * /pois/{id}/comments/{commentId}:
  *   delete:
- *     summary: Eliminar un comentario de un POI (requiere token)
+ *     summary: Eliminar un comentario de un POI
+ *     tags: [Comentarios]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: poiId
+ *         name: id
  *         required: true
+ *         description: ID del POI
  *       - in: path
  *         name: commentId
  *         required: true
+ *         description: ID del comentario
  *     responses:
  *       200:
  *         description: Comentario eliminado
  */
+
+// Eliminar comentario a un POI
 
 router.delete('/:id/comments/:commentId', auth, async (req, res) => {
   try {
@@ -181,16 +260,25 @@ router.delete('/:id/comments/:commentId', auth, async (req, res) => {
 
 /**
  * @swagger
- * /pois:
- *   post:
- *     summary: Eliminar un POI (requiere token)
+ * /pois/{id}:
+ *   delete:
+ *     summary: Eliminar un POI
+ *     tags: [POIs]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del POI a eliminar
+ *         schema:
+ *           type: string
  *     responses:
- *       204:
+ *       200:
  *         description: POI eliminado
+ *       403:
+ *         description: No autorizado
  */
-
 
 router.delete('/:id', auth, async (req, res) => {
   try {
@@ -201,7 +289,7 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(403).json({ message: 'No autorizado para eliminar este POI' });
     }
 
-    await poi.deleteOne(); 
+    await poi.deleteOne();
     res.json({ message: 'POI eliminado correctamente' });
   } catch (err) {
     console.error('Error eliminando POI:', err);
@@ -213,7 +301,8 @@ router.delete('/:id', auth, async (req, res) => {
  * @swagger
  * /pois/{id}:
  *   put:
- *     summary: Actualizar un POI (requiere token)
+ *     summary: Actualizar un POI
+ *     tags: [POIs]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -221,9 +310,19 @@ router.delete('/:id', auth, async (req, res) => {
  *         name: id
  *         required: true
  *         description: ID del POI a actualizar
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
  *     responses:
  *       200:
  *         description: POI actualizado
+ *       403:
+ *         description: No autorizado
  */
 
 router.put('/:id', auth, async (req, res) => {
@@ -252,23 +351,32 @@ router.put('/:id', auth, async (req, res) => {
 
 /**
  * @swagger
- * /generate-route:
+ * /pois/generate-route:
  *   post:
- *     summary: Generar una ruta usando Groq (requiere token)
+ *     summary: Generar una ruta turística personalizada
+ *     tags: [Rutas]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         city: name of city
- *         userId: user UID
- *         required: true
- *         description: Generate planing of day with POIs of user added
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               city:
+ *                 type: string
  *     responses:
  *       200:
- *         description: Ruta en JSON
+ *         description: Ruta generada
  */
 
 router.post('/generate-route', auth, async (req, res) => {
+
+  if (!groq) {
+    return res.status(503).json({ error: 'Groq API deshabilitada en entorno de test' });
+  }
+
   try {
     const { city } = req.body;
     const userId = req.user.uid;
@@ -328,19 +436,23 @@ Solo responde con el JSON, sin texto adicional.
 /**
  * @swagger
  * /pois/user/{id}:
- *   put:
- *     summary: Obtener todos los pois de un usuario especificado
+ *   get:
+ *     summary: Obtener POIs de un usuario especificado
+ *     tags: [POIs]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del POI a actualizar
+ *         schema:
+ *           type: string
+ *         description: UID del usuario
  *     responses:
  *       200:
- *         description: POIS del usuario
+ *         description: Lista de POIs del usuario
  */
+
 
 router.get('/user/:id', auth, async (req, res) => {
   try {
@@ -353,7 +465,7 @@ router.get('/user/:id', auth, async (req, res) => {
 
     const userPois = await POI.find({ insertedBy: userId }).sort({ dateAdded: -1 });
 
-    res.json(userPois); 
+    res.json(userPois);
   } catch (error) {
     console.error('Error obteniendo POIs del usuario:', error);
     res.status(500).json({ error: 'Error obteniendo POIs del usuario' });
@@ -364,16 +476,24 @@ router.get('/user/:id', auth, async (req, res) => {
  * @swagger
  * /pois/import-foursquare:
  *   post:
- *     summary: Agregar varios pois
+ *     summary: Insertar múltiples POIs desde Foursquare
+ *     tags: [Foursquare]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         required: true
- *         description: POIs a agregar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fsqIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *     responses:
- *       200:
- *         description: Ok, POIs agregados
+ *       201:
+ *         description: POIs insertados
  */
 
 router.post('/import-foursquare', auth, async (req, res) => {
