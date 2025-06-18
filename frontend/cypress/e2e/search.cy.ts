@@ -24,6 +24,6 @@ describe('Search POIs', () => {
     cy.contains('Parque').should('exist');
   });
 
-  // Pendiente subir otros filtros
+  // Pendiente subir otros filtros 
 
 });
