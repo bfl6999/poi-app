@@ -42,3 +42,4 @@ jobs:
           start: npm run start
           wait-on: 'http://localhost:4200'
           browser: chrome
+          working-directory: frontend 
