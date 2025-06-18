@@ -120,7 +120,7 @@ describe('API POIs', () => {
     expect([201, 500]).toContain(res.statusCode);
   });
 
-  // 9. POST /pois/generate-route
+  // 9. POST /pois/generate-route.
   it('POST /api/pois/generate-route → genera una ruta (token requerido)', async () => {
     const res = await request(app)
       .post('/api/pois/generate-route')
