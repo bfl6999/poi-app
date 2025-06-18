@@ -35,11 +35,9 @@ describe('LoginPage', () => {
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
   it('debe llamar a login con los valores del formulario', async () => {
     const fixture = TestBed.createComponent(LoginPage);
     const component = fixture.componentInstance;
-
     // mocks para loading y toast
     loadingSpy.create.and.resolveTo({
       present: () => Promise.resolve(),

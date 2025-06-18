@@ -17,7 +17,7 @@
     "src/**/*.d.ts"
   ],
   "exclude": [
-    "cypress", // 👈 impide que TS lea esos .cy.ts
+    "cypress", // Excluir archivos de cypress
     "**/*.cy.ts"
   ]
 }
