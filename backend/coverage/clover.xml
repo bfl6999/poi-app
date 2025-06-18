@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750268665913" clover="3.2.0">
-  <project timestamp="1750268665914" name="All files">
-    <metrics statements="238" coveredstatements="171" conditionals="68" coveredconditionals="31" methods="23" coveredmethods="15" elements="329" coveredelements="217" complexity="0" loc="238" ncloc="238" packages="7" files="9" classes="9"/>
+<coverage generated="1750289924582" clover="3.2.0">
+  <project timestamp="1750289924583" name="All files">
+    <metrics statements="257" coveredstatements="189" conditionals="76" coveredconditionals="36" methods="25" coveredmethods="17" elements="358" coveredelements="242" complexity="0" loc="257" ncloc="257" packages="7" files="12" classes="12"/>
     <package name="src">
-      <metrics statements="22" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <metrics statements="25" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
       <file name="app.js" path="C:\projects\proyecto-poi-app\backend\src\app.js">
-        <metrics statements="22" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="35" count="1" type="stmt"/>
+        <metrics statements="25" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.controllers">
       <metrics statements="29" coveredstatements="27" conditionals="10" coveredconditionals="7" methods="3" coveredmethods="3"/>
       <file name="foursquare.controller.js" path="C:\projects\proyecto-poi-app\backend\src\controllers\foursquare.controller.js">
         <metrics statements="29" coveredstatements="27" conditionals="10" coveredconditionals="7" methods="3" coveredmethods="3"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
@@ -45,7 +48,7 @@
         <line num="16" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="24" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="25" count="2" type="cond" truecount="1" falsecount="1"/>
@@ -69,26 +72,32 @@
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="swaggerOptions.js" path="C:\projects\proyecto-poi-app\backend\src\docs\swaggerOptions.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.middlewares">
-      <metrics statements="19" coveredstatements="14" conditionals="8" coveredconditionals="5" methods="1" coveredmethods="1"/>
+      <metrics statements="22" coveredstatements="17" conditionals="12" coveredconditionals="8" methods="2" coveredmethods="2"/>
+      <file name="errorHandler.js" path="C:\projects\proyecto-poi-app\backend\src\middlewares\errorHandler.js">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="cond" truecount="3" falsecount="1"/>
+      </file>
       <file name="firebaseAuth.js" path="C:\projects\proyecto-poi-app\backend\src\middlewares\firebaseAuth.js">
         <metrics statements="19" coveredstatements="14" conditionals="8" coveredconditionals="5" methods="1" coveredmethods="1"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="5" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="5" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
-        <line num="12" count="9" type="stmt"/>
-        <line num="13" count="9" type="stmt"/>
-        <line num="15" count="9" type="cond" truecount="2" falsecount="0"/>
-        <line num="17" count="8" type="cond" truecount="2" falsecount="0"/>
-        <line num="18" count="7" type="stmt"/>
-        <line num="19" count="7" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="15" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
@@ -101,44 +110,53 @@
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="poi.model.js" path="C:\projects\proyecto-poi-app\backend\src\models\poi.model.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="65" count="3" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="34" count="4" type="stmt"/>
+        <line num="65" count="4" type="stmt"/>
       </file>
     </package>
     <package name="src.routes">
-      <metrics statements="158" coveredstatements="99" conditionals="50" coveredconditionals="19" methods="16" coveredmethods="9"/>
+      <metrics statements="164" coveredstatements="105" conditionals="50" coveredconditionals="19" methods="17" coveredmethods="10"/>
+      <file name="auth.routes.js" path="C:\projects\proyecto-poi-app\backend\src\routes\auth.routes.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+      </file>
       <file name="foursquare.routes.js" path="C:\projects\proyecto-poi-app\backend\src\routes\foursquare.routes.js">
         <metrics statements="13" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
       </file>
       <file name="poi.routes.js" path="C:\projects\proyecto-poi-app\backend\src\routes\poi.routes.js">
         <metrics statements="130" coveredstatements="84" conditionals="48" coveredconditionals="19" methods="11" coveredmethods="9"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="60" count="1" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
         <line num="62" count="1" type="stmt"/>
         <line num="64" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -146,11 +164,11 @@
         <line num="66" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="68" count="1" type="stmt"/>
         <line num="69" count="1" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
         <line num="95" count="1" type="stmt"/>
         <line num="96" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="97" count="1" type="stmt"/>
-        <line num="140" count="1" type="stmt"/>
+        <line num="140" count="2" type="stmt"/>
         <line num="141" count="1" type="stmt"/>
         <line num="142" count="1" type="stmt"/>
         <line num="147" count="1" type="stmt"/>
@@ -158,7 +176,7 @@
         <line num="149" count="1" type="stmt"/>
         <line num="151" count="0" type="stmt"/>
         <line num="152" count="0" type="stmt"/>
-        <line num="185" count="1" type="stmt"/>
+        <line num="185" count="2" type="stmt"/>
         <line num="186" count="1" type="stmt"/>
         <line num="187" count="1" type="stmt"/>
         <line num="190" count="1" type="cond" truecount="5" falsecount="1"/>
@@ -170,7 +188,7 @@
         <line num="207" count="1" type="stmt"/>
         <line num="209" count="1" type="stmt"/>
         <line num="211" count="0" type="stmt"/>
-        <line num="239" count="1" type="stmt"/>
+        <line num="239" count="2" type="stmt"/>
         <line num="240" count="0" type="stmt"/>
         <line num="241" count="0" type="stmt"/>
         <line num="242" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -182,7 +200,7 @@
         <line num="252" count="0" type="stmt"/>
         <line num="254" count="0" type="stmt"/>
         <line num="255" count="0" type="stmt"/>
-        <line num="283" count="1" type="stmt"/>
+        <line num="283" count="2" type="stmt"/>
         <line num="284" count="1" type="stmt"/>
         <line num="285" count="1" type="stmt"/>
         <line num="286" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -192,7 +210,7 @@
         <line num="293" count="1" type="stmt"/>
         <line num="295" count="0" type="stmt"/>
         <line num="296" count="0" type="stmt"/>
-        <line num="328" count="1" type="stmt"/>
+        <line num="328" count="2" type="stmt"/>
         <line num="329" count="1" type="stmt"/>
         <line num="330" count="1" type="stmt"/>
         <line num="331" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -209,7 +227,7 @@
         <line num="345" count="1" type="stmt"/>
         <line num="347" count="0" type="stmt"/>
         <line num="348" count="0" type="stmt"/>
-        <line num="374" count="1" type="stmt"/>
+        <line num="374" count="2" type="stmt"/>
         <line num="376" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="377" count="0" type="stmt"/>
         <line num="380" count="1" type="stmt"/>
@@ -227,7 +245,7 @@
         <line num="426" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="429" count="0" type="stmt"/>
         <line num="430" count="0" type="stmt"/>
-        <line num="457" count="1" type="stmt"/>
+        <line num="457" count="2" type="stmt"/>
         <line num="458" count="1" type="stmt"/>
         <line num="459" count="1" type="stmt"/>
         <line num="462" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -236,7 +254,7 @@
         <line num="468" count="1" type="stmt"/>
         <line num="470" count="0" type="stmt"/>
         <line num="471" count="0" type="stmt"/>
-        <line num="499" count="1" type="stmt"/>
+        <line num="499" count="2" type="stmt"/>
         <line num="500" count="1" type="stmt"/>
         <line num="501" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="502" count="0" type="stmt"/>
@@ -256,36 +274,46 @@
         <line num="551" count="0" type="stmt"/>
         <line num="553" count="1" type="stmt"/>
         <line num="554" count="1" type="stmt"/>
-        <line num="558" count="1" type="stmt"/>
+        <line num="558" count="2" type="stmt"/>
       </file>
       <file name="upload.routes.js" path="C:\projects\proyecto-poi-app\backend\src\routes\upload.routes.js">
         <metrics statements="15" coveredstatements="8" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="12" coveredstatements="11" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
       <file name="foursquare.service.js" path="C:\projects\proyecto-poi-app\backend\src\services\foursquare.service.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
         <line num="4" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
         <line num="17" count="2" type="stmt"/>
+      </file>
+      <file name="groqClient.service.js" path="C:\projects\proyecto-poi-app\backend\src\services\groqClient.service.js">
+        <metrics statements="7" coveredstatements="6" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="9" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
       </file>
     </package>
   </project>

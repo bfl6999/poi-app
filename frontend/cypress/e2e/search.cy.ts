@@ -2,22 +2,27 @@ describe('Search POIs', () => {
   it('should search POIs by name', () => {
     cy.visit('/home');
 
-    // Selecciona filtro "Nombre"
-    cy.get('[data-cy="search-filter"]').click({ force: true });
+    // Abre el filtro de búsqueda
+    cy.get('[data-cy="search-filter"]').click();
+
+    // Espera y selecciona "Nombre"
+    cy.get('ion-alert').should('exist');
     cy.get('ion-alert button.alert-radio-button').contains('Nombre').click({ force: true });
     cy.get('ion-alert button.alert-button').contains('OK').click({ force: true });
 
-    // Espera a que el ion-input esté completamente renderizado y accede a su input interno
-    cy.get('[data-cy="input-name"]')
+    // Esperar a que el ion-input se monte y acceder al input interno
+    cy.get('[data-cy="input-name"]', { timeout: 10000 })
       .should('exist')
-      .find('input') // accede al input real que Ionic proyecta internamente
-      .should('be.visible')
-      .type('Parque', { delay: 50 });
+      .then(($ionInput) => {
+        const input = $ionInput[0].shadowRoot?.querySelector('input');
+        expect(input).to.exist;
+        cy.wrap(input).type('Parque', { delay: 50 });
+      });
 
-    // Enviar búsqueda
+    // Enviar formulario
     cy.get('form').submit();
 
-    // Verifica resultado
+    // Validar que haya resultados
     cy.contains('Parque', { timeout: 10000 }).should('exist');
   });
 });
