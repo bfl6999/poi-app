@@ -1,3 +1,9 @@
+const express = require('express');
+const router = express.Router();
+
+const firebaseAuth = require('../../middleware/firebaseAuth');
+const POI = require('../../models/POI');
+
 // POST /api/pois/import
 router.post('/import', firebaseAuth, async (req, res) => {
   const poi = new POI({
