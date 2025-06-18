@@ -8,14 +8,33 @@ describe('Insert POI from form', () => {
   });
 
   it('should insert a new POI from the form', () => {
-    cy.contains('Añadir POI').click();
     const id = Date.now();
+
+    // 👉 Mock de geolocalización ANTES de cargar la página
+    cy.visit('/add-poi', {
+      onBeforeLoad(win) {
+        cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake((cb) => {
+          cb({
+            coords: {
+              latitude: 37.3886,     // Coordenadas de Sevilla, por ejemplo
+              longitude: -5.9823
+            }
+          });
+        });
+      }
+    });
 
     cy.get('ion-input[formControlName="name"] input').type(`Test POI ${id}`);
     cy.get('ion-input[formControlName="location"] input').type('Sevilla');
     cy.get('ion-textarea[formControlName="description"] textarea').type('Insertado por Cypress');
-    cy.get('ion-input[formControlName="imageUrl"] input').type('https://blog.fuertehoteles.com/wp-content/uploads/2020/04/catedral-sevilla.jpg')
-    cy.get('#button-add-poi').should('be.visible').click();
+    cy.get('ion-input[formControlName="imageUrl"] input').type('https://blog.fuertehoteles.com/wp-content/uploads/2020/04/catedral-sevilla.jpg');
+
+    // Esperar que el botón esté habilitado
+    cy.get('#button-add-poi').should('not.be.disabled');
+
+    cy.get('#button-add-poi').click();
+
+    // Volver a Home y comprobar que se insertó
     cy.visit('/home');
     cy.contains(`Test POI ${id}`).should('exist');
   });
