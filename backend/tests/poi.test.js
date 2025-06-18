@@ -1,7 +1,17 @@
 const request = require('supertest');
-const app = require('../src/app');
 require('dotenv').config();
 const mongoose = require('mongoose');
+
+jest.mock('../src/services/groqClient.service', () => ({
+  // La ruta espera un método async que devuelva un objeto con una "path"
+  generateRoute: async ({ city }) => ({
+    city,
+    path: ['poi1', 'poi2', 'poi3'],
+    distance: '5 km'
+  })
+}));
+
+const app = require('../src/app');
 
 const TEST_TOKEN = process.env.TEST_JWT;
 let createdPoiId = '';
@@ -59,10 +69,12 @@ describe('API POIs', () => {
     const res = await request(app)
       .put(`/api/pois/${createdPoiId}`)
       .set('Authorization', `Bearer ${TEST_TOKEN}`)
-      .send({ name: 'Test POI Editado', geo: { 
-        type: 'Point',
-        coordinates: [-3.7038, 40.4168] // Ejemplo: Madrid
-  } });
+      .send({
+        name: 'Test POI Editado', geo: {
+          type: 'Point',
+          coordinates: [-3.7038, 40.4168] // Ejemplo: Madrid
+        }
+      });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.name).toBe('Test POI Editado');
@@ -127,7 +139,8 @@ describe('API POIs', () => {
       .set('Authorization', `Bearer ${TEST_TOKEN}`)
       .send({ city: 'Madrid' });
 
-    expect([200, 404, 500]).toContain(res.statusCode);
+    //expect([200, 404, 500]).toContain(res.statusCode);
+    expect(res.statusCode).toBe(200);
   });
 
   // 10. DELETE /pois/:id
