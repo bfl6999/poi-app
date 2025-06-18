@@ -137,7 +137,7 @@ describe('API POIs', () => {
     const res = await request(app)
       .post('/api/pois/generate-route')
       .set('Authorization', `Bearer ${TEST_TOKEN}`)
-      .send({ city: 'Madrid' });
+      .send({ city: 'Ciudad Test' });
 
     //expect([200, 404, 500]).toContain(res.statusCode);
     expect(res.statusCode).toBe(200);
