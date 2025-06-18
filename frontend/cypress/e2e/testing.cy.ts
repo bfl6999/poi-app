@@ -5,7 +5,7 @@ describe('Search POIs', () => {
     // 1. Abrir el ion-select
     cy.get('ion-select').click();
 
-    // 2. Seleccionar opción "Nombre" desde el ion-alert
+    // 2. Seleccionar "Nombre" desde ion-alert
     cy.get('ion-alert')
       .should('exist')
       .find('button.alert-radio-button')
@@ -18,16 +18,19 @@ describe('Search POIs', () => {
       .contains('OK')
       .click({ force: true });
 
-    // 4. Esperar a que el input de búsqueda por nombre esté visible
-    cy.get('ion-input[formControlName="name"] input', { timeout: 10000 })
+    // 4. Esperar que el input esté en el DOM
+    cy.get('ion-input[formControlName="name"] input', { timeout: 6000 })
       .should('exist')
-      .should('be.visible')
+      .should('be.visible');
+
+    // 5. Escribir texto
+    cy.get('ion-input[formControlName="name"] input')
       .type('Parque', { delay: 100 });
 
-    // 5. Enviar formulario
+    // 6. Enviar formulario
     cy.get('form').submit();
 
-    // 6. Verificar resultado
+    // 7. Comprobar resultados
     cy.contains('Parque').should('exist');
   });
 });
