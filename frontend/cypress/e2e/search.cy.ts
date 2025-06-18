@@ -2,32 +2,34 @@ describe('Search POIs', () => {
   it('should search POIs by name', () => {
     cy.visit('/home');
 
-    // 1. Abrir el ion-select
-    cy.get('ion-select').click();
-
-    // 2. Seleccionar opción "Nombre" desde el ion-alert
-    cy.get('ion-alert')
+    // Abrir el ion-select
+    cy.get('ion-select', { timeout: 10000 })
       .should('exist')
-      .find('button.alert-radio-button')
+      .and('be.visible')
+      .click({ force: true });
+
+    // Seleccionar opción "Nombre"
+    cy.get('ion-alert').should('exist');
+    cy.get('ion-alert button.alert-radio-button')
       .contains('Nombre')
       .click({ force: true });
 
-    // 3. Confirmar con OK
-    cy.get('ion-alert')
-      .find('button.alert-button')
+    // Confirmar la selección
+    cy.get('ion-alert button.alert-button')
       .contains('OK')
       .click({ force: true });
 
-    // 4. Esperar a que el input de búsqueda por nombre esté visible
-    cy.get('ion-input[formControlName="name"] input', { timeout: 10000 })
+    // Esperar a que el campo de nombre esté visible y disponible
+    cy.get('[data-cy="input-name"] input', { timeout: 10000 })
       .should('exist')
-      .should('be.visible')
-      .type('Parque', { delay: 100 });
+      .and('be.visible')
+      .focus()
+      .type('Parque', { delay: 50 });
 
-    // 5. Enviar formulario
+    // Enviar formulario
     cy.get('form').submit();
 
-    // 6. Verificar resultado
-    cy.contains('Parque').should('exist');
+    // Verificar resultado
+    cy.contains('Parque', { timeout: 10000 }).should('exist');
   });
 });

@@ -26,34 +26,30 @@
     <ion-card-content>
       <ion-item>
         <ion-label>Buscar por</ion-label>
-        <ion-select [(ngModel)]="searchType" placeholder="Selecciona filtro">
-          <ion-select-option value="name">Nombre</ion-select-option>
-          <ion-select-option value="location">Lugar</ion-select-option>
-          <ion-select-option value="date">Fecha</ion-select-option>
-        </ion-select>
-      </ion-item>
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="ion-margin-top">
+          <!-- Campo para nombre -->
+          <ion-item *ngIf="searchType === 'name'">
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input data-cy="input-name" formControlName="name" type="text"></ion-input>
+          </ion-item>
 
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="ion-margin-top">
-        <ion-item *ngIf="searchType === 'name'">
-          <ion-label position="floating">Nombre</ion-label>
-          <ion-input formControlName="name" type="text"></ion-input>
-        </ion-item>
+          <!-- Campo para lugar -->
+          <ion-item *ngIf="searchType === 'location'">
+            <ion-label position="floating">Lugar</ion-label>
+            <ion-input data-cy="input-location" formControlName="location" type="text"></ion-input>
+          </ion-item>
 
-        <ion-item *ngIf="searchType === 'location'">
-          <ion-label position="floating">Lugar</ion-label>
-          <ion-input formControlName="location" type="text"></ion-input>
-        </ion-item>
+          <!-- Campo para fecha -->
+          <ion-item *ngIf="searchType === 'date'">
+            <ion-label>Fecha</ion-label>
+            <ion-datetime data-cy="input-date" formControlName="date" presentation="date"></ion-datetime>
+          </ion-item>
 
-        <ion-item *ngIf="searchType === 'date'">
-          <ion-label>Fecha</ion-label>
-          <ion-datetime formControlName="date" presentation="date"></ion-datetime>
-        </ion-item>
-
-        <ion-button expand="block" type="submit" color="primary" class="ion-margin-top">
-          <ion-icon name="search" slot="start"></ion-icon>
-          Buscar
-        </ion-button>
-      </form>
+            <ion-button data-cy="submit-search" expand="block" type="submit" color="primary" class="ion-margin-top">
+              <ion-icon name="search" slot="start"></ion-icon>
+              Buscar
+            </ion-button>
+          </form>
     </ion-card-content>
   </ion-card>
 
