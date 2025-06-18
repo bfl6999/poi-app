@@ -2,12 +2,11 @@ const admin = require('firebase-admin');
 require('dotenv').config();
 
 // Solo inicializar si no está ya inicializado (para Jest + hot reload)
-if (!admin.apps.length) {
-  const serviceAccount = require('c:/projects/secretFire/firebase-adminsdk.json');
-
-  admin.initializeApp({ // Inicializa Firebase Admin con tu clave privada
-    credential: admin.credential.cert(serviceAccount)
-  });
+if (process.env.NODE_ENV !== 'testsuite') {
+  if (!admin.apps.length) {
+    const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  }
 }
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization;
