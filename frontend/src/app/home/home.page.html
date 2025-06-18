@@ -26,7 +26,7 @@
     <ion-card-content>
       <ion-item>
         <ion-label>Buscar por</ion-label>
-        <ion-select [(ngModel)]="searchType" placeholder="Selecciona filtro">
+        <ion-select data-cy="search-filter" [(ngModel)]="searchType" placeholder="Selecciona filtro">
           <ion-select-option value="name">Nombre</ion-select-option>
           <ion-select-option value="location">Lugar</ion-select-option>
           <ion-select-option value="date">Fecha</ion-select-option>
@@ -34,9 +34,9 @@
       </ion-item>
 
       <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="ion-margin-top">
-        <ion-item *ngIf="searchType === 'name'">
+        <ion-item *ngIf="searchType === 'name'" data-cy="input-name-item">
           <ion-label position="floating">Nombre</ion-label>
-          <ion-input formControlName="name" type="text"></ion-input>
+          <ion-input formControlName="name" type="text" data-cy="input-name"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="searchType === 'location'">

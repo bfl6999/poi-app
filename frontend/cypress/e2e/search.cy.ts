@@ -2,29 +2,22 @@ describe('Search POIs', () => {
   it('should search POIs by name', () => {
     cy.visit('/home');
 
-    // 1. Abrir selector de filtro
-    cy.get('ion-select', { timeout: 10000 }).should('exist').click({ force: true });
+    // Selecciona filtro "Nombre"
+    cy.get('[data-cy="search-filter"]').click({ force: true });
+    cy.get('ion-alert button.alert-radio-button').contains('Nombre').click({ force: true });
+    cy.get('ion-alert button.alert-button').contains('OK').click({ force: true });
 
-    // 2. Seleccionar opción "Nombre"
-    cy.get('ion-alert').should('be.visible');
-    cy.get('ion-alert button.alert-radio-button')
-      .contains('Nombre')
-      .click({ force: true });
-
-    cy.get('ion-alert button.alert-button')
-      .contains('OK')
-      .click({ force: true });
-
-    // 3. Esperar a que input "Nombre" esté visible
-    cy.get('[data-cy="input-name"]', { timeout: 10000 })
+    // Espera a que el ion-input esté completamente renderizado y accede a su input interno
+    cy.get('[data-cy="input-name"]')
       .should('exist')
-      .and('be.visible')
+      .find('input') // accede al input real que Ionic proyecta internamente
+      .should('be.visible')
       .type('Parque', { delay: 50 });
 
-    // 4. Enviar formulario
+    // Enviar búsqueda
     cy.get('form').submit();
 
-    // 5. Verificar resultado
+    // Verifica resultado
     cy.contains('Parque', { timeout: 10000 }).should('exist');
   });
 });
