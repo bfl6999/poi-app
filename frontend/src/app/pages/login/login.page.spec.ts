@@ -1,40 +1,66 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { LoginPage } from './login.page';               // componente stand-alone
-import { Auth } from '@angular/fire/auth';
+
+import { ToastController, LoadingController } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
+import { LoginPage } from './login.page';
+
+import type { UserCredential } from '@angular/fire/auth';
 
 describe('LoginPage', () => {
-  const authSpy = jasmine.createSpyObj('Auth', ['signInWithEmailAndPassword']);
+  let authSpy: jasmine.SpyObj<AuthService>;
+  let toastSpy: jasmine.SpyObj<ToastController>;
+  let loadingSpy: jasmine.SpyObj<LoadingController>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LoginPage],                     // ¡stand-alone!
+  beforeEach(waitForAsync(() => {
+    authSpy = jasmine.createSpyObj('AuthService', ['login']);
+    toastSpy = jasmine.createSpyObj('ToastController', ['create']);
+    loadingSpy = jasmine.createSpyObj('LoadingController', ['create']);
+
+    TestBed.configureTestingModule({
+      imports: [LoginPage],
       providers: [
-        provideRouter([]),                      // router fake
-        provideHttpClientTesting(),             // HTTP fake
-        { provide: Auth, useValue: authSpy }    // stub Firebase
+        provideRouter([]),
+        provideHttpClientTesting(),
+        { provide: AuthService, useValue: authSpy },
+        { provide: ToastController, useValue: toastSpy },
+        { provide: LoadingController, useValue: loadingSpy }
       ]
     }).compileComponents();
+  }));
+
+  it('debe crearse correctamente', () => {
+    const fixture = TestBed.createComponent(LoginPage);
+    const component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
 
-  it('debe crearse', () => {
+  it('debe llamar a login con los valores del formulario', async () => {
     const fixture = TestBed.createComponent(LoginPage);
-    expect(fixture.componentInstance).toBeTruthy();
-  });
+    const component = fixture.componentInstance;
 
-  it('debe llamar a Auth al hacer login', () => {
-    const fixture = TestBed.createComponent(LoginPage);
-    const page    = fixture.componentInstance;
+    // mocks para loading y toast
+    loadingSpy.create.and.resolveTo({
+      present: () => Promise.resolve(),
+      dismiss: () => Promise.resolve()
+    } as any);
 
-    // Ajusta a tu FormGroup real
-    (page as any).credentials.setValue({           // <- si tu form se llama distinto, cámbialo
-      email: 'a@b.com',
+    toastSpy.create.and.resolveTo({
+      present: () => Promise.resolve()
+    } as any);
+
+    // simular credenciales
+    const fakeCred = { user: {} } as UserCredential;
+    authSpy.login.and.returnValue(Promise.resolve(fakeCred));
+
+    component.loginForm.setValue({
+      email: 'test@example.com',
       password: '123456'
     });
-    page.login();                                  // método del componente
 
-    expect(authSpy.signInWithEmailAndPassword)
-      .toHaveBeenCalledWith(jasmine.anything(), 'a@b.com', '123456');
+    await component.login();
+
+    expect(authSpy.login).toHaveBeenCalledWith('test@example.com', '123456');
   });
 });
