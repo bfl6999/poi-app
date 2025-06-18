@@ -34,7 +34,7 @@
       </ion-item>
 
       <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="ion-margin-top">
-        <ion-item *ngIf="searchType === 'name'" data-cy="input-name-item">
+        <ion-item *ngIf="searchType === 'name'">
           <ion-label position="floating">Nombre</ion-label>
           <ion-input formControlName="name" type="text" data-cy="input-name"></ion-input>
         </ion-item>
