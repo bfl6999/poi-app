@@ -35,7 +35,7 @@ jobs:
       - name: 🌐 Cypress E2E
         uses: cypress-io/github-action@v6
         with:
-          start: npx http-server www -p 8100 --proxy http://localhost:8100?
+          start: npx http-server www -p 8100 -s
           wait-on: 'http://localhost:8100'
           browser: chrome
           working-directory: frontend
