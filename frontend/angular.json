@@ -37,8 +37,7 @@
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
-            "browser": "src/main.ts",
-            "baseHref": "/poi-app/"
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
