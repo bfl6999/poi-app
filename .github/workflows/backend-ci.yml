@@ -9,7 +9,8 @@ on:
       - 'backend/**'
 
 jobs:
-  test-lint:
+  backend-ci:
+    name: 🚀 Backend CI
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,27 +21,37 @@ jobs:
         image: mongo:6
         ports:
           - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.stats()'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      NODE_ENV: testsuite
+      MONGODB_URI: ${{ secrets.MONGODB_URI_TESTSUITE }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: 🔧 Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Install
+      - name: 📦 Install deps
         run: npm ci
 
-      - name: Lint
+      - name: 🧹 ESLint check
         run: npx eslint .
 
-      - name: Run tests
-        run: npm run test -- --coverage
+      - name: ✅ Run tests with coverage
+        run: npm test -- --coverage
 
-      - name: Upload coverage
+      - name: 📊 Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: backend-coverage
           path: backend/coverage

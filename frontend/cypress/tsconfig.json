@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["cypress", "node"]   // Chai + Cypress
+    "types": ["cypress", "node", "cypress-shadow-dom"]   // Chai + Cypress
   },
   "include": ["../cypress/**/*.cy.ts"]
 }
