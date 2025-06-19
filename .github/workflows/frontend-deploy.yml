@@ -1,0 +1,35 @@
+name: 🚀 Deploy Ionic/Angular to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Install dependencies
+        run: npm ci                   # instalar todo
+
+      # ----- Build con configuración production -----
+      - name: ⚙️ Build Ionic/Angular
+        run: npm run build -- --configuration production
+
+      # ----- Deploy a GitHub Pages -------------------
+      - name: 📤 Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages            # rama destino (Pages)
+          folder: frontend/www        # carpeta que contiene index.html
