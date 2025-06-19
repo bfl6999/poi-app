@@ -1,3 +1,4 @@
+// Test Firebase auth
 const mockVerifyIdToken = jest.fn();
 
 jest.mock('firebase-admin', () => ({
