@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: frontend
@@ -21,15 +22,13 @@ jobs:
           node-version: 20
 
       - name: 📦 Install dependencies
-        run: npm ci                   # instalar todo
+        run: npm ci
 
-      # ----- Build con configuración production -----
-      - name: ⚙️ Build Ionic/Angular
-        run: npm run build -- --configuration production
+      - name: ⚙️ Build Ionic/Angular para producción
+        run: npm run build
 
-      # ----- Deploy a GitHub Pages -------------------
       - name: 📤 Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages            # rama destino (Pages)
-          folder: frontend/www        # carpeta que contiene index.html
+          branch: gh-pages
+          folder: frontend/www

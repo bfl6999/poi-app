@@ -34,7 +34,7 @@ jobs:
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Build
-        run: npm run build
+        run: npm run build:ci
 
       - name: 🌐 Cypress E2E
         uses: cypress-io/github-action@v6
