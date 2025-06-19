@@ -2,11 +2,9 @@ name: Frontend CI
 
 on:
   push:
-    paths:
-      - 'frontend/**'
+    paths: ['frontend/**']
   pull_request:
-    paths:
-      - 'frontend/**'
+    paths: ['frontend/**']
 
 jobs:
   test-build-e2e:
@@ -16,11 +14,9 @@ jobs:
         working-directory: frontend
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22.14
 
@@ -33,13 +29,13 @@ jobs:
       - name: Unit tests
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
-      - name: Build
+      - name: Build (base-href /)
         run: npm run build:ci
 
       - name: 🌐 Cypress E2E
         uses: cypress-io/github-action@v6
         with:
-          start: npx http-server www -p 8100 -s
+          start: npx http-server www -p 8100 --proxy http://localhost:8100?
           wait-on: 'http://localhost:8100'
           browser: chrome
           working-directory: frontend
