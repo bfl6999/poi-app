@@ -7,6 +7,6 @@ describe('Login', () => {
     cy.url().should('include', '/home');
     cy.url().should('not.include', '/login');
     cy.wait(2000);
-    cy.contains('POIs'); // Ajustar según contenido real tras login
+    cy.contains('POIs');
   });
 });

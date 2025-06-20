@@ -1,6 +1,6 @@
 FROM node:20-slim
 
-# Establece el directorio de trabajo
+# Se establece el directorio de trabajo
 WORKDIR /app
 
 # Instala actualizaciones de seguridad del sistema

@@ -27,9 +27,6 @@ jobs:
       - name: ⚙️ Build Ionic/Angular para producción
         run: npm run build
 
-      - name: 🛠️ Add .nojekyll to allow nested paths
-        run: touch frontend/www/.nojekyll
-
       - name: 📤 Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
