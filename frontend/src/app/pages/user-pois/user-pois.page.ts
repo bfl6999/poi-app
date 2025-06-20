@@ -1,39 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';   // ← usa “inject”
+import { Auth, onAuthStateChanged, getIdToken, User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { PoiService } from 'src/app/services/poi.service';
-import { Auth, onAuthStateChanged, User, getIdToken } from '@angular/fire/auth';
 import { RouterModule } from '@angular/router';
+import { PoiService } from 'src/app/services/poi.service';
 
 @Component({
   selector: 'app-user-pois',
-  templateUrl: './user-pois.page.html',
-  styleUrls: ['./user-pois.page.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule, RouterModule],
+  templateUrl: './user-pois.page.html',
+  styleUrls: ['./user-pois.page.scss'],
 })
 export class UserPoisPage implements OnInit {
 
   pois: any[] = [];
   user: User | null = null;
 
-  constructor(private poiService: PoiService, private auth: Auth) {}
+  private auth = inject(Auth);
+  private poiService = inject(PoiService);
 
-ngOnInit() {
-  onAuthStateChanged(this.auth, async user => {
-    this.user = user;
-    if (user) {
+  ngOnInit() {
+    onAuthStateChanged(this.auth, async user => {
+      if (!user) return;
+
       const token = await getIdToken(user);
-
       this.poiService.getUserPOIs(user.uid, token).subscribe({
-        next: pois => {
-          console.log('[DEBUG] Respuesta recibida:', pois);
-          this.pois = pois;
-        },
-        error: err => console.error('Error cargando mis POIs', err)
+        next: pois => (this.pois = pois),
+        error: err  => console.error('Error cargando mis POIs', err),
       });
-    }
-  });
+    });
   }
-
 }

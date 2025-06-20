@@ -8,8 +8,7 @@ describe('GET /api/auth/me', () => {
     expect(res.body.error).toBe('Falta token de autenticación');
   });
 
-  it('debería permitir el acceso si NODE_ENV=testsuite', async () => {
-    process.env.NODE_ENV = 'testsuite';
+  it('debería permitir el acceso', async () => {
     const res = await request(app)
       .get('/api/auth/me')
       .set('Authorization', 'Bearer fake-token');

@@ -5,7 +5,7 @@ const auth = require('../middlewares/firebaseAuth'); // middleware para usuarios
 const { loadFromFoursquare } = require('../controllers/foursquare.controller');
 
 //const { ChatGroq } = require('groq-sdk'); // instala si no lo tienes
-// const groq = new ChatGroq({ apiKey: process.env.GROQ_API_KEY }); 
+// const groq = new ChatGroq({ apiKey: process.env.GROQ_API_KEY });
 
 let groq;
 try {
@@ -452,7 +452,6 @@ Solo responde con el JSON, sin texto adicional.
  *       200:
  *         description: Lista de POIs del usuario
  */
-
 
 router.get('/user/:id', auth, async (req, res) => {
   try {
